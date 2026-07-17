@@ -1,0 +1,166 @@
+:root {
+  --green: #14a800;
+  --green-dark: #108a00;
+  --green-soft: #f2f7f2;
+  --text: #001e00;
+  --muted: #5e6d55;
+  --muted-2: #676767;
+  --border: #e4ebe4;
+  --border-strong: #d5ddd5;
+  --bg: #ffffff;
+  --bg-soft: #f7faf7;
+  --pill: #f2f4f2;
+  --star: #e5a900;
+  --verified: #1f6bff;
+  --danger: #d0021b;
+  --radius: 12px;
+  --rail-w: 66px;
+  --side-w: 300px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+}
+
+body {
+  font-family: 'Neue Montreal', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+a {
+  color: var(--text);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--green);
+  text-decoration: underline;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.error {
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.between {
+  justify-content: space-between;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 999px;
+  padding: 9px 18px;
+  font: inherit;
+  font-weight: 600;
+  background: var(--green);
+  color: #fff;
+}
+
+button:hover {
+  background: var(--green-dark);
+}
+
+button.outline {
+  background: transparent;
+  border: 1px solid var(--green);
+  color: var(--green);
+}
+
+button.outline:hover {
+  background: var(--green-soft);
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--muted);
+  padding: 6px;
+}
+
+button.ghost:hover {
+  background: var(--pill);
+  color: var(--text);
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+input,
+textarea,
+select {
+  padding: 11px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  font: inherit;
+  color: var(--text);
+  background: #fff;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--green);
+}
+
+form.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 440px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--pill);
+  color: var(--muted);
+}
+
+.badge.open {
+  background: #e4f7e4;
+  color: #14751a;
+}
+
+.badge.closed {
+  background: #fdeaea;
+  color: #a12020;
+}

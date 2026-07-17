@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import { getErrorMessage } from '../api/client.js';
+import Button from '../components/ui/Button.jsx';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -25,13 +26,13 @@ export default function LoginPage() {
   }
 
   return (
-    <form className="stack" onSubmit={handleSubmit}>
+    <form className="flex max-w-md flex-col gap-3.5" onSubmit={handleSubmit}>
       <h2>Login</h2>
-      <label>Email<input name="email" type="email" value={form.email} onChange={update} required /></label>
-      <label>Password<input name="password" type="password" value={form.password} onChange={update} required /></label>
-      {error && <p className="error">{error}</p>}
-      <button type="submit">Login</button>
-      <p className="muted">No account? <Link to="/register">Sign up</Link></p>
+      <label className="flex flex-col gap-1.5 text-sm font-medium">Email<input name="email" type="email" value={form.email} onChange={update} required /></label>
+      <label className="flex flex-col gap-1.5 text-sm font-medium">Password<input name="password" type="password" value={form.password} onChange={update} required /></label>
+      {error && <p className="text-sm text-danger">{error}</p>}
+      <Button type="submit">Login</Button>
+      <p className="text-muted">No account? <Link to="/register">Sign up</Link></p>
     </form>
   );
 }

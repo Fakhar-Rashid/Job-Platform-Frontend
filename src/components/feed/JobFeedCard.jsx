@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ThumbsDown, Heart, BadgeCheck, Star, MapPin } from 'lucide-react';
 import { timeAgo, proposalRange, money, experienceLabel } from '../../utils/format.js';
+import Pill from '../ui/Pill.jsx';
 
 const MAX_SKILLS = 4;
 
@@ -21,53 +22,53 @@ export default function JobFeedCard({ job, onDismiss }) {
   }
 
   return (
-    <article className="job-card" onClick={() => navigate(`/jobs/${job.id}`)}>
-      <div className="top">
-        <span className="stamp">
+    <article className="cursor-pointer border-b border-hair px-1.5 py-5 transition-colors hover:bg-soft" onClick={() => navigate(`/jobs/${job.id}`)}>
+      <div className="flex items-start justify-between gap-3">
+        <span className="text-[13px] text-muted">
           Posted {timeAgo(job.createdAt)} &nbsp;•&nbsp; Proposals: {proposalRange(job.bidCount)}
         </span>
-        <div className="actions">
-          <button className="icon-btn" title="Not interested"
+        <div className="flex shrink-0 gap-1.5">
+          <button className="grid h-8.5 w-8.5 cursor-pointer place-items-center rounded-full border border-line bg-white p-0 text-muted hover:border-ink hover:text-ink" title="Not interested"
             onClick={(e) => stop(e, () => onDismiss?.(job.id))}>
             <ThumbsDown size={16} />
           </button>
-          <button className="icon-btn" title="Save job"
+          <button className="grid h-8.5 w-8.5 cursor-pointer place-items-center rounded-full border border-line bg-white p-0 text-muted hover:border-ink hover:text-ink" title="Save job"
             onClick={(e) => stop(e, () => setSaved((s) => !s))}>
             <Heart size={16} fill={saved ? 'currentColor' : 'none'} />
           </button>
         </div>
       </div>
 
-      <h3><Link to={`/jobs/${job.id}`} onClick={(e) => e.stopPropagation()}>{job.title}</Link></h3>
+      <h3 className="my-1.5 text-xl"><Link to={`/jobs/${job.id}`} onClick={(e) => e.stopPropagation()}>{job.title}</Link></h3>
 
-      <p className="meta">
+      <p className="mb-2.5 text-[13px] text-muted">
         {type} - {experienceLabel(job.experienceLevel)}
         {job.durationLabel ? ` - Est. Time: ${job.durationLabel}` : ''}
       </p>
 
-      <p className={`desc ${expanded ? '' : 'clamp'}`}>{job.description}</p>
+      <p className={`mb-1 ${expanded ? '' : 'line-clamp-2'}`}>{job.description}</p>
       {job.description.length > 140 && (
-        <button className="more-link" onClick={(e) => stop(e, () => setExpanded((v) => !v))}>
+        <button className="mb-3 cursor-pointer font-medium text-brand hover:underline" onClick={(e) => stop(e, () => setExpanded((v) => !v))}>
           {expanded ? 'less' : 'more'}
         </button>
       )}
 
       {skills.length > 0 && (
-        <div className="pills">
-          {shownSkills.map((skill) => <span className="pill" key={skill}>{skill}</span>)}
-          {extraSkills > 0 && <span className="pill">+{extraSkills}</span>}
+        <div className="mb-3.5 flex flex-wrap gap-2">
+          {shownSkills.map((skill) => <Pill key={skill}>{skill}</Pill>)}
+          {extraSkills > 0 && <Pill>+{extraSkills}</Pill>}
         </div>
       )}
 
-      <div className="trust">
+      <div className="flex flex-wrap items-center gap-4.5 text-[13px] text-muted">
         {owner.paymentVerified && (
-          <span className="item"><BadgeCheck size={16} className="verified" /> Payment verified</span>
+          <span className="inline-flex items-center gap-1.25"><BadgeCheck size={16} className="text-verified" /> Payment verified</span>
         )}
         {owner.rating != null && (
-          <span className="item"><Star size={15} className="star" fill="currentColor" /> {owner.rating.toFixed(1)}</span>
+          <span className="inline-flex items-center gap-1.25"><Star size={15} className="text-star" fill="currentColor" /> {owner.rating.toFixed(1)}</span>
         )}
-        {owner.totalSpent > 0 && <span className="item">{money(owner.totalSpent)} spent</span>}
-        {owner.country && <span className="item"><MapPin size={15} /> {owner.country}</span>}
+        {owner.totalSpent > 0 && <span className="inline-flex items-center gap-1.25">{money(owner.totalSpent)} spent</span>}
+        {owner.country && <span className="inline-flex items-center gap-1.25"><MapPin size={15} /> {owner.country}</span>}
       </div>
     </article>
   );

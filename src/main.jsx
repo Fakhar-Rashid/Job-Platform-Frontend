@@ -7,11 +7,7 @@ import '@fontsource/poppins/400.css';
 import '@fontsource/poppins/500.css';
 import '@fontsource/poppins/600.css';
 import '@fontsource/poppins/700.css';
-import './styles/global.css';
-import './styles/layout.css';
-import './styles/feed.css';
-import './styles/sidebar.css';
-import './styles/profile.css';
+import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

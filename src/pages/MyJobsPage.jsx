@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import JobCard from '../components/JobCard.jsx';
 import * as jobsApi from '../api/jobs.js';
 import { getErrorMessage } from '../api/client.js';
+import Button from '../components/ui/Button.jsx';
 
 export default function MyJobsPage() {
   const [jobs, setJobs] = useState([]);
@@ -14,13 +15,13 @@ export default function MyJobsPage() {
 
   return (
     <>
-      <div className="row between">
+      <div className="flex items-center justify-between gap-3">
         <h2>My jobs</h2>
-        <Link to="/post-job"><button>Post a job</button></Link>
+        <Link to="/post-job"><Button>Post a job</Button></Link>
       </div>
-      {error && <p className="error">{error}</p>}
+      {error && <p className="text-sm text-danger">{error}</p>}
       {jobs.length === 0 ? (
-        <p className="muted">You haven't posted any jobs yet.</p>
+        <p className="text-muted">You haven't posted any jobs yet.</p>
       ) : (
         jobs.map((job) => <JobCard key={job.id} job={job} />)
       )}

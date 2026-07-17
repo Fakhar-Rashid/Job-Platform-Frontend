@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as jobsApi from '../api/jobs.js';
 import { getErrorMessage } from '../api/client.js';
+import Button from '../components/ui/Button.jsx';
 
 export default function PostJobPage() {
   const navigate = useNavigate();
@@ -24,13 +25,13 @@ export default function PostJobPage() {
   }
 
   return (
-    <form className="stack" onSubmit={handleSubmit}>
+    <form className="flex max-w-md flex-col gap-3.5" onSubmit={handleSubmit}>
       <h2>Post a job</h2>
-      <label>Title<input name="title" value={form.title} onChange={update} required /></label>
-      <label>Description<textarea name="description" rows="5" value={form.description} onChange={update} required /></label>
-      <label>Budget ($)<input name="budget" type="number" min="1" value={form.budget} onChange={update} required /></label>
-      {error && <p className="error">{error}</p>}
-      <button type="submit">Publish job</button>
+      <label className="flex flex-col gap-1.5 text-sm font-medium">Title<input name="title" value={form.title} onChange={update} required /></label>
+      <label className="flex flex-col gap-1.5 text-sm font-medium">Description<textarea name="description" rows="5" value={form.description} onChange={update} required /></label>
+      <label className="flex flex-col gap-1.5 text-sm font-medium">Budget ($)<input name="budget" type="number" min="1" value={form.budget} onChange={update} required /></label>
+      {error && <p className="text-sm text-danger">{error}</p>}
+      <Button type="submit">Publish job</Button>
     </form>
   );
 }

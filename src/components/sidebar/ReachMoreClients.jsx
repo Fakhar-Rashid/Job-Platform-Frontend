@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { ChevronUp, ChevronDown, Info, Pencil } from 'lucide-react';
+import Card from '../ui/Card.jsx';
 
 function ToggleRow({ label, value, onEdit }) {
   return (
-    <div className="side-row">
+    <div className="flex items-center justify-between border-t border-hair py-3 text-sm">
       <div>
-        <div className="label">{label} <Info size={14} className="muted" /></div>
-        <div className="sub">{value ? 'On' : 'Off'}</div>
+        <div className="flex items-center gap-1.5">{label} <Info size={14} className="text-muted" /></div>
+        <div className="text-xs text-muted">{value ? 'On' : 'Off'}</div>
       </div>
-      <button className="toggle-pencil" aria-label={`Edit ${label}`} onClick={onEdit}>
+      <button className="rounded-md p-1 text-brand hover:bg-brand-soft" aria-label={`Edit ${label}`} onClick={onEdit}>
         <Pencil size={16} />
       </button>
     </div>
@@ -21,10 +22,10 @@ export default function ReachMoreClients() {
   const [boost, setBoost] = useState(true);
 
   return (
-    <div className="side-card">
-      <h4>
+    <Card>
+      <h4 className="mb-4 flex items-center justify-between text-base">
         Reach more clients
-        <button className="toggle-pencil" aria-label="Toggle section" onClick={() => setOpen((o) => !o)}>
+        <button className="rounded-md p-1 text-brand hover:bg-brand-soft" aria-label="Toggle section" onClick={() => setOpen((o) => !o)}>
           {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
         </button>
       </h4>
@@ -34,6 +35,6 @@ export default function ReachMoreClients() {
           <ToggleRow label="Boost your profile" value={boost} onEdit={() => setBoost((v) => !v)} />
         </>
       )}
-    </div>
+    </Card>
   );
 }

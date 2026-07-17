@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { BadgeCheck } from 'lucide-react';
 import CoreSection from './CoreSection.jsx';
+import Card from '../ui/Card.jsx';
+import Button from '../ui/Button.jsx';
 import { useAuth } from '../../hooks/useAuth.js';
 import * as connectsApi from '../../api/connects.js';
 import { HOURS_LABEL } from '../../utils/format.js';
@@ -9,10 +11,10 @@ const HOURS_OPTIONS = Object.entries(HOURS_LABEL);
 
 export function StatsCard({ profile }) {
   return (
-    <section className="card stats-card">
-      <div><b>${profile.stats.totalEarnings}</b><div className="muted">Total earnings</div></div>
-      <div><b>{profile.stats.totalJobs}</b><div className="muted">Total jobs</div></div>
-    </section>
+    <Card className="flex gap-9">
+      <div><b className="text-xl">${profile.stats.totalEarnings}</b><div className="text-muted">Total earnings</div></div>
+      <div><b className="text-xl">{profile.stats.totalJobs}</b><div className="text-muted">Total jobs</div></div>
+    </Card>
   );
 }
 
@@ -26,8 +28,8 @@ export function PromoteCard({ profile, editable, onChanged }) {
         { name: 'boostProfile', label: 'Boost your profile', type: 'checkbox' },
       ]}
     >
-      <div className="mini-row"><span>Availability badge</span><span className="muted">{profile.availabilityBadge ? 'On' : 'Off'}</span></div>
-      <div className="mini-row"><span>Boost your profile</span><span className="muted">{profile.boostProfile ? 'On' : 'Off'}</span></div>
+      <div className="flex items-center justify-between gap-3 border-t border-hair py-[9px]"><span>Availability badge</span><span className="text-muted">{profile.availabilityBadge ? 'On' : 'Off'}</span></div>
+      <div className="flex items-center justify-between gap-3 border-t border-hair py-[9px]"><span>Boost your profile</span><span className="text-muted">{profile.boostProfile ? 'On' : 'Off'}</span></div>
     </CoreSection>
   );
 }
@@ -45,9 +47,9 @@ export function VerificationsCard({ profile, editable, onChanged }) {
       ]}
     >
       {rows.map(([label, on]) => (
-        <div className="mini-row" key={label}>
+        <div className="flex items-center justify-between gap-3 border-t border-hair py-[9px]" key={label}>
           <span>{label}</span>
-          {on ? <span className="verified-text"><BadgeCheck size={15} /> Verified</span> : <span className="muted">—</span>}
+          {on ? <span className="inline-flex items-center gap-1 text-[13px] text-verified"><BadgeCheck size={15} /> Verified</span> : <span className="text-muted">—</span>}
         </div>
       ))}
     </CoreSection>
@@ -65,7 +67,7 @@ export function HoursCard({ profile, editable, onChanged }) {
       ]}
     >
       <p>{HOURS_LABEL[profile.hoursPerWeek] ?? 'Not set'}</p>
-      {profile.openToContractToHire && <p className="muted">Open to contract to hire</p>}
+      {profile.openToContractToHire && <p className="text-muted">Open to contract to hire</p>}
     </CoreSection>
   );
 }
@@ -91,7 +93,7 @@ export function VideoCard({ profile, editable, onChanged }) {
     >
       {profile.videoIntroUrl
         ? <a href={profile.videoIntroUrl} target="_blank" rel="noreferrer">Watch introduction</a>
-        : <p className="muted">Add a video introduction</p>}
+        : <p className="text-muted">Add a video introduction</p>}
     </CoreSection>
   );
 }
@@ -112,11 +114,11 @@ export function ConnectsCard({ profile, onChanged }) {
   }
 
   return (
-    <section className="card">
-      <div className="section-head"><h3>Connects: {profile.connectBalance}</h3></div>
-      <button className="outline" style={{ width: '100%' }} onClick={buy} disabled={busy}>
+    <Card>
+      <div className="mb-3 flex items-start justify-between gap-3"><h3>Connects: {profile.connectBalance}</h3></div>
+      <Button variant="outline" className="w-full" onClick={buy} disabled={busy}>
         {busy ? 'Adding…' : 'Buy Connects'}
-      </button>
-    </section>
+      </Button>
+    </Card>
   );
 }

@@ -32,8 +32,8 @@ export function EducationSection({ profile, editable, onChanged }) {
       renderItem={(e) => (
         <div>
           <b>{e.school}</b>
-          <div className="muted">{[e.degree, e.fieldOfStudy].filter(Boolean).join(', ')}</div>
-          {(e.startYear || e.endYear) && <div className="muted">{e.startYear}–{e.endYear}</div>}
+          <div className="text-muted">{[e.degree, e.fieldOfStudy].filter(Boolean).join(', ')}</div>
+          {(e.startYear || e.endYear) && <div className="text-muted">{e.startYear}–{e.endYear}</div>}
         </div>
       )}
     />
@@ -56,8 +56,8 @@ export function EmploymentSection({ profile, editable, onChanged }) {
       renderItem={(e) => (
         <div>
           <b>{e.title}</b> · {e.company}
-          <div className="muted">{monthLabel(e.startDate)} – {e.current ? 'Present' : monthLabel(e.endDate)}</div>
-          {e.description && <p className="section-sub">{e.description}</p>}
+          <div className="text-muted">{monthLabel(e.startDate)} – {e.current ? 'Present' : monthLabel(e.endDate)}</div>
+          {e.description && <p className="mt-1 text-[13px]">{e.description}</p>}
         </div>
       )}
     />
@@ -77,12 +77,12 @@ export function PortfolioListSection({ profile, editable, onChanged }) {
         { name: 'projectUrl', label: 'Project URL' },
       ]}
       renderItem={(p) => (
-        <div className="portfolio-item">
-          {p.imageUrl && <img src={p.imageUrl} alt="" />}
+        <div className="flex gap-3">
+          {p.imageUrl && <img src={p.imageUrl} alt="" className="h-20 w-[120px] shrink-0 rounded-lg object-cover" />}
           <div>
             <b>{p.title}</b>
-            {p.category && <div className="muted">{p.category}</div>}
-            {p.description && <p className="section-sub">{p.description}</p>}
+            {p.category && <div className="text-muted">{p.category}</div>}
+            {p.description && <p className="mt-1 text-[13px]">{p.description}</p>}
           </div>
         </div>
       )}
@@ -100,7 +100,7 @@ export function CertificationsSection({ profile, editable, onChanged }) {
         { name: 'issuer', label: 'Issuer' },
         { name: 'year', label: 'Year', type: 'number' },
       ]}
-      renderItem={(c) => <div><b>{c.name}</b><div className="muted">{[c.issuer, c.year].filter(Boolean).join(' · ')}</div></div>}
+      renderItem={(c) => <div><b>{c.name}</b><div className="text-muted">{[c.issuer, c.year].filter(Boolean).join(' · ')}</div></div>}
     />
   );
 }
@@ -115,7 +115,7 @@ export function LicensesSection({ profile, editable, onChanged }) {
         { name: 'issuer', label: 'Issuer' },
         { name: 'year', label: 'Year', type: 'number' },
       ]}
-      renderItem={(c) => <div><b>{c.name}</b><div className="muted">{[c.issuer, c.year].filter(Boolean).join(' · ')}</div></div>}
+      renderItem={(c) => <div><b>{c.name}</b><div className="text-muted">{[c.issuer, c.year].filter(Boolean).join(' · ')}</div></div>}
     />
   );
 }
@@ -133,7 +133,7 @@ export function LinkedAccountsSection({ profile, editable, onChanged }) {
       renderItem={(a) => (
         <div>
           <b>{a.provider}</b>
-          <div className="muted">{a.url ? <a href={a.url} target="_blank" rel="noreferrer">{a.username}</a> : a.username}</div>
+          <div className="text-muted">{a.url ? <a href={a.url} target="_blank" rel="noreferrer">{a.username}</a> : a.username}</div>
         </div>
       )}
     />
@@ -149,7 +149,7 @@ export function OtherExperiencesSection({ profile, editable, onChanged }) {
         { name: 'subject', label: 'Subject' },
         { name: 'description', label: 'Description', type: 'textarea' },
       ]}
-      renderItem={(o) => <div><b>{o.subject}</b>{o.description && <p className="section-sub">{o.description}</p>}</div>}
+      renderItem={(o) => <div><b>{o.subject}</b>{o.description && <p className="mt-1 text-[13px]">{o.description}</p>}</div>}
     />
   );
 }

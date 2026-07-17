@@ -5,6 +5,8 @@ import BidForm from '../components/BidForm.jsx';
 import BidCard from '../components/BidCard.jsx';
 import ReviewForm from '../components/ReviewForm.jsx';
 import Stars from '../components/profile/Stars.jsx';
+import Badge from '../components/ui/Badge.jsx';
+import Card from '../components/ui/Card.jsx';
 import * as jobsApi from '../api/jobs.js';
 import * as bidsApi from '../api/bids.js';
 import * as reviewsApi from '../api/reviews.js';
@@ -48,24 +50,24 @@ export default function JobDetailPage() {
     }
   }
 
-  if (error && !job) return <p className="error">{error}</p>;
-  if (!job) return <p className="muted">Loading…</p>;
+  if (error && !job) return <p className="text-danger text-sm">{error}</p>;
+  if (!job) return <p className="text-muted">Loading…</p>;
 
   return (
     <>
-      <div className="row between">
+      <div className="flex items-center justify-between gap-3">
         <h2>{job.title}</h2>
-        <span className={`badge ${job.status.toLowerCase()}`}>{job.status}</span>
+        <Badge variant={job.status.toLowerCase()}>{job.status}</Badge>
       </div>
       <p>{job.description}</p>
-      <p className="muted">Budget: ${job.budget} · Posted by {job.owner?.name}</p>
-      {error && <p className="error">{error}</p>}
-      {notice && <p className="muted">{notice}</p>}
+      <p className="text-muted">Budget: ${job.budget} · Posted by {job.owner?.name}</p>
+      {error && <p className="text-danger text-sm">{error}</p>}
+      {notice && <p className="text-muted">{notice}</p>}
 
       {isOwner ? (
         <section>
           <h3>Bids ({bids.length})</h3>
-          {bids.length === 0 && <p className="muted">No bids yet.</p>}
+          {bids.length === 0 && <p className="text-muted">No bids yet.</p>}
           {bids.map((bid) => (
             <BidCard key={bid.id} bid={bid} canAccept={job.status === 'OPEN'} onAccept={handleAccept} />
           ))}
@@ -73,26 +75,26 @@ export default function JobDetailPage() {
       ) : user && job.status === 'OPEN' ? (
         <BidForm jobId={job.id} onBid={() => { setNotice('Your bid was submitted.'); load(); }} />
       ) : !user ? (
-        <p className="muted">Log in to place a bid.</p>
+        <p className="text-muted">Log in to place a bid.</p>
       ) : (
-        <p className="muted">This job is closed.</p>
+        <p className="text-muted">This job is closed.</p>
       )}
 
       {job.status === 'CLOSED' && review && (
-        <section className="card">
-          <div className="row" style={{ gap: 8 }}>
+        <Card>
+          <div className="flex items-center gap-2">
             <Stars rating={review.rating} />
             <b>{review.rating.toFixed(1)}</b>
           </div>
-          <p className="section-sub">“{review.comment}”</p>
-          <p className="muted">— {review.author?.name}</p>
-        </section>
+          <p className="mt-1 text-[13px]">“{review.comment}”</p>
+          <p className="text-muted">— {review.author?.name}</p>
+        </Card>
       )}
 
       {isOwner && job.status === 'CLOSED' && !review && (
-        <div className="card">
+        <Card>
           <ReviewForm jobId={job.id} onDone={() => { setNotice('Review submitted.'); load(); }} />
-        </div>
+        </Card>
       )}
     </>
   );

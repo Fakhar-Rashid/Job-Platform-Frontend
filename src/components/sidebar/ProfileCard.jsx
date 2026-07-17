@@ -1,42 +1,44 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
 import { avatarFor } from '../../utils/avatar.js';
+import Button from '../ui/Button.jsx';
+import Card from '../ui/Card.jsx';
 
 export default function ProfileCard() {
   const { user } = useAuth();
 
   if (!user) {
     return (
-      <div className="side-card">
-        <h4>Join MiniWork</h4>
-        <p className="muted">Sign up to bid on jobs and hire freelancers.</p>
-        <Link to="/register"><button style={{ width: '100%' }}>Create account</button></Link>
-      </div>
+      <Card>
+        <h4 className="mb-4 flex items-center justify-between text-base">Join MiniWork</h4>
+        <p className="text-muted">Sign up to bid on jobs and hire freelancers.</p>
+        <Link to="/register"><Button className="w-full">Create account</Button></Link>
+      </Card>
     );
   }
 
   return (
-    <div className="side-card">
-      <div className="profile-head">
-        <img src={avatarFor(user, 104)} alt="" />
+    <Card>
+      <div className="mb-4 flex items-center gap-3">
+        <img src={avatarFor(user, 104)} alt="" className="h-13 w-13 rounded-full object-cover" />
         <div>
-          <Link to="/profile" className="name">{user.name}</Link>
-          <div className="title">{user.title || 'Add your professional title'}</div>
+          <Link to="/profile" className="font-semibold underline">{user.name}</Link>
+          <div className="text-[13px] text-muted">{user.title || 'Add your professional title'}</div>
         </div>
       </div>
 
-      <div className="side-row">
-        <span className="label">Profile Visibility</span>
-        <span className="link-green">Public</span>
+      <div className="flex items-center justify-between border-t border-hair py-3 text-sm">
+        <span className="flex items-center gap-1.5">Profile Visibility</span>
+        <span className="font-medium text-brand">Public</span>
       </div>
 
-      <div style={{ paddingTop: 12 }}>
-        <Link to="/profile" className="link-green">Complete your profile</Link>
-        <div className="progress">
-          <div className="bar"><div className="fill" style={{ width: '100%' }} /></div>
-          <span className="muted">100%</span>
+      <div className="pt-3">
+        <Link to="/profile" className="font-medium text-brand">Complete your profile</Link>
+        <div className="mt-1.5 flex items-center gap-2.5">
+          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-hair"><div className="h-full w-full bg-brand" /></div>
+          <span className="text-muted">100%</span>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

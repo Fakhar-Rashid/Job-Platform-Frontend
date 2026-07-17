@@ -1,17 +1,21 @@
+import Card from './ui/Card.jsx';
+import Badge from './ui/Badge.jsx';
+import Button from './ui/Button.jsx';
+
 export default function BidCard({ bid, onAccept, canAccept }) {
   return (
-    <div className="card">
-      <div className="row between">
+    <Card>
+      <div className="flex items-center justify-between gap-3">
         <strong>{bid.freelancer?.name ?? 'Freelancer'}</strong>
-        <span className={`badge ${bid.status === 'ACCEPTED' ? 'open' : ''}`}>{bid.status}</span>
+        <Badge variant={bid.status === 'ACCEPTED' ? 'open' : 'neutral'}>{bid.status}</Badge>
       </div>
-      <p className="muted">{bid.coverLetter}</p>
-      <div className="row between">
+      <p className="text-muted">{bid.coverLetter}</p>
+      <div className="flex items-center justify-between gap-3">
         <span>Offer: ${bid.amount}</span>
         {canAccept && bid.status === 'PENDING' && (
-          <button onClick={() => onAccept(bid.id)}>Accept</button>
+          <Button onClick={() => onAccept(bid.id)}>Accept</Button>
         )}
       </div>
-    </div>
+    </Card>
   );
 }

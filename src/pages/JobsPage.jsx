@@ -31,16 +31,16 @@ export default function JobsPage() {
   const visible = jobs.filter((job) => !dismissed.includes(job.id));
 
   return (
-    <div className="home-grid">
-      <section className="feed-col">
+    <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-[minmax(0,1fr)_300px]">
+      <section className="min-w-0">
         <SearchBar value={search} onChange={setSearch} />
         <SavedSearches onSelect={setSearch} />
         <FeedTabs active={tab} onSelect={setTab} onToggleFilters={() => {}} />
-        <p className="feed-intro">{INTRO[tab] ?? 'Nothing here yet — check back soon.'}</p>
+        <p className="mb-1 mt-4.5 text-muted">{INTRO[tab] ?? 'Nothing here yet — check back soon.'}</p>
 
-        {error && <p className="error">{error}</p>}
+        {error && <p className="text-sm text-danger">{error}</p>}
         {!hasFeed || visible.length === 0 ? (
-          <p className="muted" style={{ padding: '24px 0' }}>No jobs to show right now.</p>
+          <p className="py-6 text-muted">No jobs to show right now.</p>
         ) : (
           visible.map((job) => (
             <JobFeedCard
@@ -52,7 +52,7 @@ export default function JobsPage() {
         )}
       </section>
 
-      <aside className="side-col">
+      <aside className="sticky top-7 hidden flex-col gap-4.5 lg:flex">
         <ProfileCard />
         <ReachMoreClients />
         <SidebarLinks />

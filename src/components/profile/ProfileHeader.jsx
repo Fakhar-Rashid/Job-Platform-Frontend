@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { BadgeCheck, MapPin, Share2 } from 'lucide-react';
 import Modal from './Modal.jsx';
 import ItemForm from './ItemForm.jsx';
+import Button from '../ui/Button.jsx';
+import Card from '../ui/Card.jsx';
 import * as profileApi from '../../api/profile.js';
 import { getErrorMessage } from '../../api/client.js';
 import { avatarFor } from '../../utils/avatar.js';
@@ -28,28 +30,28 @@ export default function ProfileHeader({ profile, editable, onChanged }) {
   }
 
   return (
-    <section className="card profile-header">
-      <div className="profile-header-main">
-        <img className="profile-avatar" src={avatarFor(profile)} alt="" />
+    <Card className="flex flex-wrap items-center justify-between gap-4">
+      <div className="flex items-center gap-4">
+        <img className="h-20 w-20 rounded-full object-cover" src={avatarFor(profile)} alt="" />
         <div>
-          <h2 className="row" style={{ gap: 8 }}>
+          <h2 className="flex items-center gap-2">
             {profile.name}
-            {profile.idVerified && <BadgeCheck size={20} className="verified" />}
+            {profile.idVerified && <BadgeCheck size={20} className="text-verified" />}
           </h2>
-          <p className="muted row" style={{ gap: 6 }}>
+          <p className="flex items-center gap-1.5 text-muted">
             <MapPin size={15} /> {location || 'Location not set'}
           </p>
         </div>
       </div>
 
-      <div className="profile-header-actions">
+      <div className="flex items-center gap-2.5">
         {editable && (
           <>
-            <Link to={`/users/${profile.id}`}><button className="outline">See public view</button></Link>
-            <button onClick={() => setOpen(true)}>Profile settings</button>
+            <Link to={`/users/${profile.id}`}><Button variant="outline">See public view</Button></Link>
+            <Button onClick={() => setOpen(true)}>Profile settings</Button>
           </>
         )}
-        <button className="ghost row" style={{ gap: 6 }}><Share2 size={16} /> Share</button>
+        <Button variant="ghost" className="gap-1.5"><Share2 size={16} /> Share</Button>
       </div>
 
       {open && (
@@ -69,6 +71,6 @@ export default function ProfileHeader({ profile, editable, onChanged }) {
           />
         </Modal>
       )}
-    </section>
+    </Card>
   );
 }

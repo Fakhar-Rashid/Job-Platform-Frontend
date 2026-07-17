@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth.js';
+import Button from './ui/Button.jsx';
 import * as bidsApi from '../api/bids.js';
 import { getErrorMessage } from '../api/client.js';
 
@@ -29,16 +30,16 @@ export default function BidForm({ jobId, onBid }) {
   }
 
   return (
-    <form className="stack" onSubmit={handleSubmit}>
+    <form className="flex max-w-md flex-col gap-3.5" onSubmit={handleSubmit}>
       <h3>Place a bid</h3>
-      <label>Your offer ($)
+      <label className="flex flex-col gap-1.5 text-sm font-medium">Your offer ($)
         <input name="amount" type="number" min="1" value={form.amount} onChange={update} required />
       </label>
-      <label>Cover letter
+      <label className="flex flex-col gap-1.5 text-sm font-medium">Cover letter
         <textarea name="coverLetter" rows="4" value={form.coverLetter} onChange={update} required />
       </label>
-      {error && <p className="error">{error}</p>}
-      <button type="submit" disabled={busy}>Bid (costs 5 connects)</button>
+      {error && <p className="text-danger text-sm">{error}</p>}
+      <Button type="submit" disabled={busy}>Bid (costs 5 connects)</Button>
     </form>
   );
 }

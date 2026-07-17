@@ -26,15 +26,19 @@ export default function SidebarLinks() {
   }
 
   return (
-    <nav className="side-nav">
-      <div className="side-nav-connects">
-        <Link to="/profile">Connects: {user.connectBalance}</Link>
-        <button className="link-green" onClick={handleTopUp} disabled={busy}>
+    <nav className="flex flex-col gap-3.5 px-5 py-1">
+      <div className="flex flex-col gap-0.5">
+        <Link to="/profile" className="font-semibold">Connects: {user.connectBalance}</Link>
+        <button
+          className="self-start p-0 text-[13px] font-medium text-brand hover:underline disabled:cursor-not-allowed disabled:opacity-55"
+          onClick={handleTopUp}
+          disabled={busy}
+        >
           {busy ? 'Adding…' : 'Buy Connects'}
         </button>
       </div>
       {NAV.map(({ label, to }) => (
-        <Link key={label} to={to}>{label}</Link>
+        <Link key={label} to={to} className="font-medium">{label}</Link>
       ))}
     </nav>
   );

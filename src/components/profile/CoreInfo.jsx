@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Pencil } from 'lucide-react';
 import Modal from './Modal.jsx';
 import ItemForm from './ItemForm.jsx';
+import Button from '../ui/Button.jsx';
+import Card from '../ui/Card.jsx';
 import * as profileApi from '../../api/profile.js';
 import { getErrorMessage } from '../../api/client.js';
 
@@ -25,21 +27,21 @@ export default function CoreInfo({ profile, editable, onChanged }) {
   }
 
   return (
-    <section className="card">
-      <div className="section-head">
-        <h3>{profile.title || 'Add your professional title'}</h3>
-        <div className="row" style={{ gap: 12 }}>
-          {profile.hourlyRate != null && <span className="rate">${profile.hourlyRate}.00/hr</span>}
+    <Card>
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <h3 className="text-lg">{profile.title || 'Add your professional title'}</h3>
+        <div className="flex items-center gap-3">
+          {profile.hourlyRate != null && <span className="whitespace-nowrap font-semibold">${profile.hourlyRate}.00/hr</span>}
           {editable && (
-            <button className="icon-round" onClick={() => setOpen(true)} aria-label="Edit title">
+            <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={() => setOpen(true)} aria-label="Edit title">
               <Pencil size={15} />
-            </button>
+            </Button>
           )}
         </div>
       </div>
       {profile.overview
-        ? <p className="overview">{profile.overview}</p>
-        : <p className="muted">Add an overview describing what you do.</p>}
+        ? <p className="whitespace-pre-wrap">{profile.overview}</p>
+        : <p className="text-muted">Add an overview describing what you do.</p>}
 
       {open && (
         <Modal title="Edit profile summary" onClose={() => setOpen(false)}>
@@ -57,6 +59,6 @@ export default function CoreInfo({ profile, editable, onChanged }) {
           />
         </Modal>
       )}
-    </section>
+    </Card>
   );
 }

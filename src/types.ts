@@ -4,6 +4,10 @@ export type ExperienceLevel = 'ENTRY' | 'INTERMEDIATE' | 'EXPERT';
 export type BidStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
 export type HoursPerWeek = 'AS_NEEDED' | 'LESS_THAN_30' | 'MORE_THAN_30';
 export type LanguageProficiency = 'BASIC' | 'CONVERSATIONAL' | 'FLUENT' | 'NATIVE_OR_BILINGUAL';
+export type Role = 'FREELANCER' | 'CLIENT';
+export type ScopeSize = 'LARGE' | 'MEDIUM' | 'SMALL';
+export type ProjectTerm = 'LONG_TERM' | 'SHORT_TERM';
+export type JobDuration = 'MORE_THAN_6_MONTHS' | 'THREE_TO_SIX_MONTHS' | 'ONE_TO_THREE_MONTHS';
 
 export interface CurrentUser {
   id: string;
@@ -13,31 +17,76 @@ export interface CurrentUser {
   connectBalance: number;
   title?: string | null;
   avatarUrl?: string | null;
+  hourlyRate?: number | null;
+  activeRole: Role;
+  onlineForMessages: boolean;
 }
 
 export interface JobOwner {
   id: string;
   name: string;
   paymentVerified?: boolean;
+  phoneVerified?: boolean;
   rating?: number | null;
   totalSpent?: number;
   country?: string | null;
+  createdAt?: string;
 }
 
 export interface Job {
   id: string;
   title: string;
   description: string;
-  budget: number;
+  budget: number | null;
   jobType: JobType;
   experienceLevel: ExperienceLevel;
-  durationLabel?: string | null;
+  category?: string | null;
+  projectTerm?: ProjectTerm | null;
+  scopeSize?: ScopeSize | null;
+  duration?: JobDuration | null;
+  contractToHire: boolean;
+  hourlyRateMin?: number | null;
+  hourlyRateMax?: number | null;
+  connectsRequired: number;
+  lastViewedAt?: string | null;
   skills: string[];
   status: JobStatus;
   createdAt: string;
   ownerId: string;
   owner?: JobOwner;
   bidCount?: number;
+}
+
+export interface JobActivity {
+  proposalCount: number;
+  lastViewedAt: string | null;
+  bidRange: { high: number; avg: number; low: number } | null;
+}
+
+export interface JobClient {
+  paymentVerified: boolean;
+  phoneVerified: boolean;
+  country: string | null;
+  memberSince: string;
+  openJobs: number;
+  hireRate: number;
+}
+
+export type JobDetail = Job & { activity: JobActivity; client: JobClient };
+
+export interface TalentUser {
+  id: string;
+  name: string;
+  title: string | null;
+  hourlyRate: number | null;
+  skills: string[];
+  country: string | null;
+  avatarUrl: string | null;
+}
+
+export interface BoostEntry {
+  boostConnects: number;
+  createdAt: string;
 }
 
 export interface JobsPage {
@@ -57,6 +106,7 @@ export interface Bid {
   amount: number;
   coverLetter: string;
   connectsSpent: number;
+  boostConnects: number;
   status: BidStatus;
   createdAt: string;
   jobId: string;
@@ -172,6 +222,8 @@ export interface Profile {
   availabilityBadge: boolean;
   boostProfile: boolean;
   showWorkHistory: boolean;
+  activeRole: Role;
+  onlineForMessages: boolean;
   rating?: number | null;
   languages: Language[];
   educations: Education[];

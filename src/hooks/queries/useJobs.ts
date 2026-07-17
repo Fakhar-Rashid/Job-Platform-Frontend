@@ -31,3 +31,16 @@ export function useCreateJob() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ['jobs'] }),
   });
 }
+
+export function useSavedJobs(enabled = true) {
+  return useQuery({ queryKey: queryKeys.savedJobs(), queryFn: jobsApi.savedJobs, enabled });
+}
+
+export function useToggleSaveJob() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ jobId, saved }: { jobId: string; saved: boolean }) =>
+      saved ? jobsApi.unsaveJob(jobId) : jobsApi.saveJob(jobId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: queryKeys.savedJobs() }),
+  });
+}

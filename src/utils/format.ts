@@ -1,4 +1,12 @@
-import type { ExperienceLevel, HoursPerWeek, LanguageProficiency } from '../types';
+import type {
+  ExperienceLevel,
+  HoursPerWeek,
+  Job,
+  JobDuration,
+  LanguageProficiency,
+  ProjectTerm,
+  ScopeSize,
+} from '../types';
 
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
@@ -67,3 +75,32 @@ export const PROFICIENCY_LABEL: Record<LanguageProficiency, string> = {
   FLUENT: 'Fluent',
   NATIVE_OR_BILINGUAL: 'Native or Bilingual',
 };
+
+export const SCOPE_LABEL: Record<ScopeSize, string> = {
+  LARGE: 'Large',
+  MEDIUM: 'Medium',
+  SMALL: 'Small',
+};
+
+export const DURATION_LABEL: Record<JobDuration, string> = {
+  MORE_THAN_6_MONTHS: 'More than 6 months',
+  THREE_TO_SIX_MONTHS: '3 to 6 months',
+  ONE_TO_THREE_MONTHS: '1 to 3 months',
+};
+
+export const TERM_LABEL: Record<ProjectTerm, string> = {
+  LONG_TERM: 'More than 30 hrs/week',
+  SHORT_TERM: 'Less than 30 hrs/week',
+};
+
+export function jobRateLabel(job: Pick<Job, 'jobType' | 'budget' | 'hourlyRateMin' | 'hourlyRateMax'>): string {
+  if (job.jobType === 'HOURLY' && job.hourlyRateMin != null && job.hourlyRateMax != null) {
+    return `$${job.hourlyRateMin.toFixed(2)} - $${job.hourlyRateMax.toFixed(2)}`;
+  }
+  return job.budget != null ? `$${job.budget}` : 'Budget not set';
+}
+
+export function serviceFee(amount: number): { fee: number; receives: number } {
+  const fee = Math.round(amount * 0.1 * 100) / 100;
+  return { fee, receives: Math.round((amount - fee) * 100) / 100 };
+}

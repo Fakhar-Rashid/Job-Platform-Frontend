@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import Card from './ui/Card';
 import Badge from './ui/Badge';
+import { jobRateLabel } from '../utils/format';
 import type { Job } from '../types';
 
 interface JobCardProps {
@@ -18,7 +19,7 @@ export default function JobCard({ job }: JobCardProps) {
       </div>
       <p className="text-muted">{job.description}</p>
       <div className="flex items-center justify-between gap-3">
-        <span>Budget: ${job.budget}</span>
+        <span>{jobRateLabel(job)}</span>
         <span className="text-muted">
           {job.bidCount ?? 0} bids · by {job.owner?.name ?? 'Unknown'}
         </span>

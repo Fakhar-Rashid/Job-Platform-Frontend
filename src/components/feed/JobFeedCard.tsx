@@ -2,7 +2,7 @@ import { useState } from 'react';
 import type { MouseEvent } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ThumbsDown, Heart, BadgeCheck, Star, MapPin } from 'lucide-react';
-import { timeAgo, proposalRange, money, experienceLabel } from '../../utils/format';
+import { timeAgo, proposalRange, money, experienceLabel, DURATION_LABEL } from '../../utils/format';
 import Pill from '../ui/Pill';
 import type { Job, JobOwner } from '../../types';
 
@@ -11,11 +11,12 @@ const MAX_SKILLS = 4;
 interface JobFeedCardProps {
   job: Job;
   onDismiss?: (id: string) => void;
+  saved?: boolean;
+  onToggleSave?: (id: string) => void;
 }
 
-export default function JobFeedCard({ job, onDismiss }: JobFeedCardProps) {
+export default function JobFeedCard({ job, onDismiss, saved = false, onToggleSave }: JobFeedCardProps) {
   const navigate = useNavigate();
-  const [saved, setSaved] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const owner: Partial<JobOwner> = job.owner ?? {};
   const type = job.jobType === 'HOURLY' ? 'Hourly' : 'Fixed price';
@@ -46,9 +47,9 @@ export default function JobFeedCard({ job, onDismiss }: JobFeedCardProps) {
             <ThumbsDown size={16} />
           </button>
           <button
-            className="grid h-8.5 w-8.5 cursor-pointer place-items-center rounded-full border border-line bg-white p-0 text-muted hover:border-ink hover:text-ink"
-            title="Save job"
-            onClick={(e) => stop(e, () => setSaved((s) => !s))}
+            className={`grid h-8.5 w-8.5 cursor-pointer place-items-center rounded-full border border-line bg-white p-0 hover:border-ink hover:text-ink ${saved ? 'text-brand' : 'text-muted'}`}
+            title={saved ? 'Unsave job' : 'Save job'}
+            onClick={(e) => stop(e, () => onToggleSave?.(job.id))}
           >
             <Heart size={16} fill={saved ? 'currentColor' : 'none'} />
           </button>
@@ -63,7 +64,7 @@ export default function JobFeedCard({ job, onDismiss }: JobFeedCardProps) {
 
       <p className="mb-2.5 text-[13px] text-muted">
         {type} - {experienceLabel(job.experienceLevel)}
-        {job.durationLabel ? ` - Est. Time: ${job.durationLabel}` : ''}
+        {job.duration ? ` - Est. Time: ${DURATION_LABEL[job.duration]}` : ''}
       </p>
 
       <p className={`mb-1 ${expanded ? '' : 'line-clamp-2'}`}>{job.description}</p>

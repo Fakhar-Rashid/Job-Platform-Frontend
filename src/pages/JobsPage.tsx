@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SearchBar from '../components/feed/SearchBar';
 import SavedSearches from '../components/feed/SavedSearches';
 import FeedTabs from '../components/feed/FeedTabs';
@@ -7,17 +8,21 @@ import ProfileCard from '../components/sidebar/ProfileCard';
 import ReachMoreClients from '../components/sidebar/ReachMoreClients';
 import SidebarLinks from '../components/sidebar/SidebarLinks';
 import Button from '../components/ui/Button';
-import { useInfiniteJobs } from '../hooks/queries/useJobs';
+import { useInfiniteJobs, useSavedJobs, useToggleSaveJob } from '../hooks/queries/useJobs';
+import { useAuth } from '../hooks/useAuth';
 import { getErrorMessage } from '../api/client';
-import type { JobsFilters } from '../types';
+import type { Job, JobsFilters } from '../types';
 
 const INTRO: Record<string, string> = {
   'Best matches':
     "Browse jobs that match your experience to a client's hiring preferences. Ordered by most relevant.",
   'Most recent': 'The newest jobs posted on MiniWork, ordered by date.',
+  'Saved jobs': 'Jobs you saved to revisit later.',
 };
 
 export default function JobsPage() {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [search, setSearch] = useState('');
   const [debounced, setDebounced] = useState('');
   const [tab, setTab] = useState('Best matches');
@@ -32,10 +37,37 @@ export default function JobsPage() {
     () => ({ status: 'OPEN', ...(debounced ? { search: debounced } : {}) }),
     [debounced],
   );
-  const hasFeed = tab === 'Best matches' || tab === 'Most recent';
   const { data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteJobs(filters);
+  const { data: saved = [] } = useSavedJobs(Boolean(user));
+  const toggleSave = useToggleSaveJob();
 
-  const jobs = (data?.pages.flatMap((page) => page.items) ?? []).filter((job) => !dismissed.includes(job.id));
+  const savedIds = useMemo(() => new Set(saved.map((job) => job.id)), [saved]);
+  const feedJobs = (data?.pages.flatMap((page) => page.items) ?? []).filter(
+    (job) => !dismissed.includes(job.id),
+  );
+  const isSavedTab = tab === 'Saved jobs';
+  const hasFeed = tab === 'Best matches' || tab === 'Most recent' || isSavedTab;
+  const jobs = isSavedTab ? saved : feedJobs;
+
+  function handleToggleSave(jobId: string) {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+    toggleSave.mutate({ jobId, saved: savedIds.has(jobId) });
+  }
+
+  function renderCard(job: Job) {
+    return (
+      <JobFeedCard
+        key={job.id}
+        job={job}
+        saved={savedIds.has(job.id)}
+        onToggleSave={handleToggleSave}
+        onDismiss={(id: string) => setDismissed((prev) => [...prev, id])}
+      />
+    );
+  }
 
   return (
     <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-[minmax(0,1fr)_300px]">
@@ -48,20 +80,16 @@ export default function JobsPage() {
         {error && <p className="text-sm text-danger">{getErrorMessage(error)}</p>}
         {!hasFeed ? (
           <p className="py-6 text-muted">Nothing here yet — check back soon.</p>
-        ) : isLoading ? (
+        ) : isLoading && !isSavedTab ? (
           <p className="py-6 text-muted">Loading jobs…</p>
         ) : jobs.length === 0 ? (
-          <p className="py-6 text-muted">No jobs to show right now.</p>
+          <p className="py-6 text-muted">
+            {isSavedTab ? "You haven't saved any jobs yet." : 'No jobs to show right now.'}
+          </p>
         ) : (
           <>
-            {jobs.map((job) => (
-              <JobFeedCard
-                key={job.id}
-                job={job}
-                onDismiss={(id: string) => setDismissed((prev) => [...prev, id])}
-              />
-            ))}
-            {hasNextPage && (
+            {jobs.map(renderCard)}
+            {!isSavedTab && hasNextPage && (
               <div className="py-6 text-center">
                 <Button variant="outline" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
                   {isFetchingNextPage ? 'Loading…' : 'Load more jobs'}

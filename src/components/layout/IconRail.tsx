@@ -1,32 +1,32 @@
 import { Link, useLocation } from 'react-router-dom';
-import {
-  Search,
-  Home,
-  Bell,
-  TrendingUp,
-  Briefcase,
-  CircleDollarSign,
-  MessageSquare,
-  Settings,
-  HelpCircle,
-} from 'lucide-react';
+import { Home, CircleDollarSign, Briefcase, Users, Settings, HelpCircle, type LucideIcon } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { avatarFor } from '../../utils/avatar';
+import AccountMenu from './AccountMenu';
 
-const NAV = [
-  { to: '/search', icon: Search, label: 'Search' },
+interface NavItem {
+  to: string;
+  icon: LucideIcon;
+  label: string;
+}
+
+const FREELANCER_NAV: NavItem[] = [
   { to: '/', icon: Home, label: 'Home' },
-  { to: '/notifications', icon: Bell, label: 'Alerts' },
-  { to: '/stats', icon: TrendingUp, label: 'Stats' },
+  { to: '/my-bids', icon: CircleDollarSign, label: 'My proposals' },
+  { to: '/settings', icon: Settings, label: 'Settings' },
+];
+
+const CLIENT_NAV: NavItem[] = [
+  { to: '/', icon: Home, label: 'Home' },
   { to: '/my-jobs', icon: Briefcase, label: 'My jobs' },
-  { to: '/my-bids', icon: CircleDollarSign, label: 'My bids' },
-  { to: '/messages', icon: MessageSquare, label: 'Messages' },
-  { to: '/profile', icon: Settings, label: 'Settings' },
+  { to: '/talent', icon: Users, label: 'Find talent' },
+  { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 export default function IconRail() {
   const { user } = useAuth();
   const { pathname } = useLocation();
+  const nav = user?.activeRole === 'CLIENT' ? CLIENT_NAV : FREELANCER_NAV;
 
   return (
     <aside className="sticky top-0 flex h-screen w-16.5 shrink-0 flex-col items-center gap-2.5 self-start border-r border-hair bg-white py-3.5">
@@ -36,19 +36,23 @@ export default function IconRail() {
           className="grid h-8.5 w-8.5 place-items-center rounded-full bg-brand text-[15px] font-bold text-white"
           aria-label="Home"
         >
-          up
+          mw
         </Link>
-        <Link to={user ? '/profile' : '/login'} aria-label="Profile">
-          <img
-            className="h-8.5 w-8.5 rounded-full border border-line object-cover"
-            src={avatarFor(user, 80)}
-            alt=""
-          />
-        </Link>
+        {user ? (
+          <AccountMenu />
+        ) : (
+          <Link to="/login" aria-label="Log in">
+            <img
+              className="h-8.5 w-8.5 rounded-full border border-line object-cover"
+              src={avatarFor(null, 80)}
+              alt=""
+            />
+          </Link>
+        )}
       </div>
 
       <nav className="mt-2 flex flex-1 flex-col items-center gap-1.5">
-        {NAV.map(({ to, icon: Icon, label }) => (
+        {nav.map(({ to, icon: Icon, label }) => (
           <Link
             key={label}
             to={to}

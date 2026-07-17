@@ -15,4 +15,8 @@ export const queryKeys = {
   contracts: () => ['contracts'] as const,
   contract: (id: string) => ['contracts', id] as const,
   wallet: () => ['wallet'] as const,
+  conversations: (filter: string) => ['conversations', 'list', filter] as const,
+  conversation: (id: string) => ['conversations', id] as const,
+  messages: (id: string, search: string) => ['conversations', id, 'messages', search] as const,
+  unreadCount: () => ['conversations', 'unread'] as const,
 };

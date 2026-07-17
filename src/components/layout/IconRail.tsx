@@ -4,12 +4,14 @@ import {
   CircleDollarSign,
   Briefcase,
   FileText,
+  MessageSquare,
   Users,
   Settings,
   HelpCircle,
   type LucideIcon,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
+import { useUnreadCount } from '../../hooks/queries/useMessages';
 import { avatarFor } from '../../utils/avatar';
 import AccountMenu from './AccountMenu';
 
@@ -23,6 +25,7 @@ const FREELANCER_NAV: NavItem[] = [
   { to: '/', icon: Home, label: 'Home' },
   { to: '/my-bids', icon: CircleDollarSign, label: 'My proposals' },
   { to: '/contracts', icon: FileText, label: 'Contracts' },
+  { to: '/messages', icon: MessageSquare, label: 'Messages' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
@@ -30,6 +33,7 @@ const CLIENT_NAV: NavItem[] = [
   { to: '/', icon: Home, label: 'Home' },
   { to: '/my-jobs', icon: Briefcase, label: 'My jobs' },
   { to: '/contracts', icon: FileText, label: 'Contracts' },
+  { to: '/messages', icon: MessageSquare, label: 'Messages' },
   { to: '/talent', icon: Users, label: 'Find talent' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
@@ -37,6 +41,7 @@ const CLIENT_NAV: NavItem[] = [
 export default function IconRail() {
   const { user } = useAuth();
   const { pathname } = useLocation();
+  const { data: unread } = useUnreadCount(Boolean(user));
   const nav = user?.activeRole === 'CLIENT' ? CLIENT_NAV : FREELANCER_NAV;
 
   return (
@@ -67,11 +72,14 @@ export default function IconRail() {
           <Link
             key={label}
             to={to}
-            className={`grid h-10.5 w-10.5 place-items-center rounded-[10px] hover:bg-brand-soft hover:text-ink hover:no-underline ${pathname === to ? 'bg-brand-soft text-ink' : 'text-muted'}`}
+            className={`relative grid h-10.5 w-10.5 place-items-center rounded-[10px] hover:bg-brand-soft hover:text-ink hover:no-underline ${pathname === to ? 'bg-brand-soft text-ink' : 'text-muted'}`}
             aria-label={label}
             title={label}
           >
             <Icon size={22} strokeWidth={1.8} />
+            {to === '/messages' && (unread?.count ?? 0) > 0 && (
+              <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-brand" />
+            )}
           </Link>
         ))}
       </nav>

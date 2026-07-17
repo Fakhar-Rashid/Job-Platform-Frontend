@@ -10,6 +10,7 @@ import MyBidsPage from './pages/MyBidsPage';
 import TalentPage from './pages/TalentPage';
 import ContractsPage from './pages/ContractsPage';
 import ContractRoomPage from './pages/ContractRoomPage';
+import MessagesPage from './pages/MessagesPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage';
@@ -28,6 +29,8 @@ export default function AppRoutes() {
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/contracts" element={<ContractsPage />} />
         <Route path="/contracts/:id" element={<ContractRoomPage />} />
+        <Route path="/messages" element={<MessagesPage />} />
+        <Route path="/messages/:id" element={<MessagesPage />} />
       </Route>
       <Route element={<RoleRoute role="CLIENT" />}>
         <Route path="/post-job" element={<PostJobPage />} />

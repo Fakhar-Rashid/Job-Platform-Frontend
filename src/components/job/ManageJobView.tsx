@@ -6,6 +6,7 @@ import Button from '../ui/Button';
 import BidCard from '../BidCard';
 import HireModal from '../contract/HireModal';
 import { useJobBids } from '../../hooks/queries/useBids';
+import { useStartConversation } from '../../hooks/queries/useMessages';
 import { jobRateLabel } from '../../utils/format';
 import type { Bid, ContractStatus, JobDetail } from '../../types';
 
@@ -22,15 +23,40 @@ const CONTRACT_ACTION: Partial<Record<ContractStatus, { badge: React.ReactNode; 
 export default function ManageJobView({ job }: ManageJobViewProps) {
   const [hiringBid, setHiringBid] = useState<Bid | null>(null);
   const { data: bids = [] } = useJobBids(job.id, true);
+  const startConversation = useStartConversation();
+
+  function messageButton(bid: Bid): React.ReactNode {
+    return (
+      <Button
+        size="sm"
+        variant="outline"
+        disabled={startConversation.isPending}
+        onClick={() =>
+          startConversation.mutate({
+            jobId: job.id,
+            freelancerId: bid.freelancerId,
+            body: `Hi ${bid.freelancer?.name ?? ''}, I'd like to discuss your proposal for "${job.title}".`,
+          })
+        }
+      >
+        Message
+      </Button>
+    );
+  }
 
   function bidAction(bid: Bid): React.ReactNode {
     const contract = bid.contracts?.[0];
     if (!contract) {
-      if (job.status !== 'OPEN') return null;
       return (
-        <Button size="sm" onClick={() => setHiringBid(bid)}>
-          Hire
-        </Button>
+        <span className="flex items-center gap-2">
+          {bid.interviewing && <Badge variant="open">Interviewing</Badge>}
+          {messageButton(bid)}
+          {job.status === 'OPEN' && (
+            <Button size="sm" onClick={() => setHiringBid(bid)}>
+              Hire
+            </Button>
+          )}
+        </span>
       );
     }
     const entry = CONTRACT_ACTION[contract.status];

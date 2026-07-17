@@ -147,6 +147,11 @@ export default function FreelancerJobView({ job }: FreelancerJobViewProps) {
             <div>
               <span className="font-medium">Proposals:</span> {proposalRange(activity.proposalCount)}
             </div>
+            {activity.interviewing > 0 && (
+              <div>
+                <span className="font-medium">Interviewing:</span> {activity.interviewing}
+              </div>
+            )}
             {activity.lastViewedAt && (
               <div>
                 <span className="font-medium">Last viewed by client:</span> {timeAgo(activity.lastViewedAt)}

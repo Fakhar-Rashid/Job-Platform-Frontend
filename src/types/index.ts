@@ -11,6 +11,7 @@ export type JobDuration = 'MORE_THAN_6_MONTHS' | 'THREE_TO_SIX_MONTHS' | 'ONE_TO
 
 import type { ContractStatus } from './contracts';
 export * from './contracts';
+export * from './messages';
 
 export interface CurrentUser {
   id: string;
@@ -63,6 +64,7 @@ export interface Job {
 
 export interface JobActivity {
   proposalCount: number;
+  interviewing: number;
   lastViewedAt: string | null;
   bidRange: { high: number; avg: number; low: number } | null;
 }
@@ -112,6 +114,7 @@ export interface Bid {
   connectsSpent: number;
   boostConnects: number;
   status: BidStatus;
+  interviewing: boolean;
   createdAt: string;
   jobId: string;
   freelancerId: string;

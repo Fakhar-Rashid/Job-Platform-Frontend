@@ -1,0 +1,39 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import * as bidsApi from '../../api/bids';
+import { queryKeys } from '../../lib/queryKeys';
+import type { Bid } from '../../types';
+
+export function useJobBids(jobId: string, enabled: boolean) {
+  return useQuery({
+    queryKey: queryKeys.jobBids(jobId),
+    queryFn: () => bidsApi.jobBids(jobId),
+    enabled: Boolean(jobId) && enabled,
+  });
+}
+
+export function useMyBids() {
+  return useQuery({ queryKey: queryKeys.myBids(), queryFn: bidsApi.myBids });
+}
+
+export function usePlaceBid(jobId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (data: Partial<Bid>) => bidsApi.placeBid(jobId, data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: queryKeys.job(jobId) });
+      qc.invalidateQueries({ queryKey: queryKeys.myBids() });
+      qc.invalidateQueries({ queryKey: queryKeys.connects() });
+    },
+  });
+}
+
+export function useAcceptBid(jobId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (bidId: string) => bidsApi.acceptBid(bidId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: queryKeys.job(jobId) });
+      qc.invalidateQueries({ queryKey: queryKeys.jobBids(jobId) });
+    },
+  });
+}

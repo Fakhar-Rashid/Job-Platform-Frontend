@@ -1,0 +1,132 @@
+import { useState } from 'react';
+import { BadgeCheck } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+import CoreSection from './CoreSection';
+import Card from '../ui/Card';
+import Button from '../ui/Button';
+import { useAuth } from '../../hooks/useAuth';
+import * as connectsApi from '../../api/connects';
+import { HOURS_LABEL } from '../../utils/format';
+import type { Profile } from '../../types';
+
+interface SectionProps {
+  profile: Profile;
+  editable: boolean;
+}
+
+const HOURS_OPTIONS = Object.entries(HOURS_LABEL) as [string, string][];
+
+export function StatsCard({ profile }: { profile: Profile }) {
+  return (
+    <Card className="flex gap-9">
+      <div><b className="text-xl">${profile.stats.totalEarnings}</b><div className="text-muted">Total earnings</div></div>
+      <div><b className="text-xl">{profile.stats.totalJobs}</b><div className="text-muted">Total jobs</div></div>
+    </Card>
+  );
+}
+
+export function PromoteCard({ profile, editable }: SectionProps) {
+  return (
+    <CoreSection
+      title="Promote with ads" editable={editable}
+      values={{ availabilityBadge: profile.availabilityBadge, boostProfile: profile.boostProfile }}
+      fields={[
+        { name: 'availabilityBadge', label: 'Availability badge', type: 'checkbox' },
+        { name: 'boostProfile', label: 'Boost your profile', type: 'checkbox' },
+      ]}
+    >
+      <div className="flex items-center justify-between gap-3 border-t border-hair py-[9px]"><span>Availability badge</span><span className="text-muted">{profile.availabilityBadge ? 'On' : 'Off'}</span></div>
+      <div className="flex items-center justify-between gap-3 border-t border-hair py-[9px]"><span>Boost your profile</span><span className="text-muted">{profile.boostProfile ? 'On' : 'Off'}</span></div>
+    </CoreSection>
+  );
+}
+
+export function VerificationsCard({ profile, editable }: SectionProps) {
+  const rows: [string, boolean][] = [['ID', profile.idVerified], ['Phone number', profile.phoneVerified], ['Military veteran', profile.militaryVeteran]];
+  return (
+    <CoreSection
+      title="Verifications" editable={editable}
+      values={{ idVerified: profile.idVerified, phoneVerified: profile.phoneVerified, militaryVeteran: profile.militaryVeteran }}
+      fields={[
+        { name: 'idVerified', label: 'ID verified', type: 'checkbox' },
+        { name: 'phoneVerified', label: 'Phone number verified', type: 'checkbox' },
+        { name: 'militaryVeteran', label: 'Military veteran', type: 'checkbox' },
+      ]}
+    >
+      {rows.map(([label, on]) => (
+        <div className="flex items-center justify-between gap-3 border-t border-hair py-[9px]" key={label}>
+          <span>{label}</span>
+          {on ? <span className="inline-flex items-center gap-1 text-[13px] text-verified"><BadgeCheck size={15} /> Verified</span> : <span className="text-muted">—</span>}
+        </div>
+      ))}
+    </CoreSection>
+  );
+}
+
+export function HoursCard({ profile, editable }: SectionProps) {
+  return (
+    <CoreSection
+      title="Hours per week" editable={editable}
+      values={{ hoursPerWeek: profile.hoursPerWeek ?? '', openToContractToHire: profile.openToContractToHire }}
+      fields={[
+        { name: 'hoursPerWeek', label: 'Availability', type: 'select', options: HOURS_OPTIONS },
+        { name: 'openToContractToHire', label: 'Open to contract to hire', type: 'checkbox' },
+      ]}
+    >
+      <p>{HOURS_LABEL[profile.hoursPerWeek as keyof typeof HOURS_LABEL] ?? 'Not set'}</p>
+      {profile.openToContractToHire && <p className="text-muted">Open to contract to hire</p>}
+    </CoreSection>
+  );
+}
+
+export function ResponseCard({ profile, editable }: SectionProps) {
+  return (
+    <CoreSection
+      title="Avg. response" editable={editable}
+      values={{ responseTime: profile.responseTime ?? '' }}
+      fields={[{ name: 'responseTime', label: 'Average response time' }]}
+    >
+      <p>{profile.responseTime || 'Not set'}</p>
+    </CoreSection>
+  );
+}
+
+export function VideoCard({ profile, editable }: SectionProps) {
+  return (
+    <CoreSection
+      title="Video introduction" editable={editable}
+      values={{ videoIntroUrl: profile.videoIntroUrl ?? '' }}
+      fields={[{ name: 'videoIntroUrl', label: 'Video URL' }]}
+    >
+      {profile.videoIntroUrl
+        ? <a href={profile.videoIntroUrl} target="_blank" rel="noreferrer">Watch introduction</a>
+        : <p className="text-muted">Add a video introduction</p>}
+    </CoreSection>
+  );
+}
+
+export function ConnectsCard({ profile }: { profile: Profile }) {
+  const { refreshUser } = useAuth();
+  const qc = useQueryClient();
+  const [busy, setBusy] = useState(false);
+
+  async function buy() {
+    setBusy(true);
+    try {
+      await connectsApi.topUp();
+      await refreshUser();
+      qc.invalidateQueries({ queryKey: ['profile'] });
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Card>
+      <div className="mb-3 flex items-start justify-between gap-3"><h3>Connects: {profile.connectBalance}</h3></div>
+      <Button variant="outline" className="w-full" onClick={buy} disabled={busy}>
+        {busy ? 'Adding…' : 'Buy Connects'}
+      </Button>
+    </Card>
+  );
+}

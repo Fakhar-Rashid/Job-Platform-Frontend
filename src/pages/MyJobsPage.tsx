@@ -12,7 +12,9 @@ export default function MyJobsPage() {
     <>
       <div className="flex items-center justify-between gap-3">
         <h2>My jobs</h2>
-        <Link to="/post-job"><Button>Post a job</Button></Link>
+        <Link to="/post-job">
+          <Button>Post a job</Button>
+        </Link>
       </div>
       {error && <p className="text-sm text-danger">{getErrorMessage(error)}</p>}
       {isLoading ? (

@@ -44,7 +44,11 @@ export default function SkillsSection({ profile, editable }: SkillsSectionProps)
             {skills.map((skill) => (
               <Pill key={skill}>
                 {skill}
-                <button className="inline-flex cursor-pointer border-none bg-transparent pl-1 text-inherit" onClick={() => setSkills(skills.filter((s) => s !== skill))} aria-label={`Remove ${skill}`}>
+                <button
+                  className="inline-flex cursor-pointer border-none bg-transparent pl-1 text-inherit"
+                  onClick={() => setSkills(skills.filter((s) => s !== skill))}
+                  aria-label={`Remove ${skill}`}
+                >
                   <X size={13} />
                 </button>
               </Pill>
@@ -52,18 +56,31 @@ export default function SkillsSection({ profile, editable }: SkillsSectionProps)
           </div>
           <form className="mt-3 flex items-center gap-3" onSubmit={addSkill}>
             <input placeholder="Add a skill" value={value} onChange={(e) => setValue(e.target.value)} />
-            <Button type="submit" variant="secondary">Add</Button>
+            <Button type="submit" variant="secondary">
+              Add
+            </Button>
           </form>
           {error && <p className="text-danger text-sm">{error}</p>}
           <div className="mt-3 flex items-center gap-3">
             <Button onClick={save}>Save</Button>
-            <Button variant="secondary" onClick={() => { setSkills(profile.skills); setEditing(false); }}>Cancel</Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                setSkills(profile.skills);
+                setEditing(false);
+              }}
+            >
+              Cancel
+            </Button>
           </div>
         </>
       ) : (
         <div className="flex flex-wrap gap-2">
-          {skills.length === 0 ? <p className="text-muted">No skills added yet.</p>
-            : skills.map((skill) => <Pill key={skill}>{skill}</Pill>)}
+          {skills.length === 0 ? (
+            <p className="text-muted">No skills added yet.</p>
+          ) : (
+            skills.map((skill) => <Pill key={skill}>{skill}</Pill>)
+          )}
         </div>
       )}
     </SectionCard>

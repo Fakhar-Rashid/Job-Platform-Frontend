@@ -12,7 +12,8 @@ import { getErrorMessage } from '../api/client';
 import type { JobsFilters } from '../types';
 
 const INTRO: Record<string, string> = {
-  'Best matches': "Browse jobs that match your experience to a client's hiring preferences. Ordered by most relevant.",
+  'Best matches':
+    "Browse jobs that match your experience to a client's hiring preferences. Ordered by most relevant.",
   'Most recent': 'The newest jobs posted on MiniWork, ordered by date.',
 };
 
@@ -32,9 +33,7 @@ export default function JobsPage() {
     [debounced],
   );
   const hasFeed = tab === 'Best matches' || tab === 'Most recent';
-  const {
-    data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage,
-  } = useInfiniteJobs(filters);
+  const { data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteJobs(filters);
 
   const jobs = (data?.pages.flatMap((page) => page.items) ?? []).filter((job) => !dismissed.includes(job.id));
 
@@ -56,7 +55,11 @@ export default function JobsPage() {
         ) : (
           <>
             {jobs.map((job) => (
-              <JobFeedCard key={job.id} job={job} onDismiss={(id: string) => setDismissed((prev) => [...prev, id])} />
+              <JobFeedCard
+                key={job.id}
+                job={job}
+                onDismiss={(id: string) => setDismissed((prev) => [...prev, id])}
+              />
             ))}
             {hasNextPage && (
               <div className="py-6 text-center">

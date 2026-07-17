@@ -24,7 +24,14 @@ interface OpenState {
 }
 
 export default function EditableList({
-  title, subtitle, path, items, fields, renderItem, emptyText, editable,
+  title,
+  subtitle,
+  path,
+  items,
+  fields,
+  renderItem,
+  emptyText,
+  editable,
 }: EditableListProps) {
   const [open, setOpen] = useState<OpenState | null>(null);
   const [error, setError] = useState('');
@@ -58,12 +65,24 @@ export default function EditableList({
         <p className="text-muted">{emptyText}</p>
       ) : (
         items.map((item) => (
-          <div className="flex justify-between gap-3 border-t border-hair py-3 first:border-t-0 first:pt-0" key={item.id}>
+          <div
+            className="flex justify-between gap-3 border-t border-hair py-3 first:border-t-0 first:pt-0"
+            key={item.id}
+          >
             <div>{renderItem(item)}</div>
             {editable && (
               <div className="flex shrink-0 gap-0.5">
-                <Button variant="ghost" size="icon" onClick={() => startEdit(item)} aria-label="Edit"><Pencil size={15} /></Button>
-                <Button variant="ghost" size="icon" onClick={() => remove.mutate(item.id)} aria-label="Delete"><Trash2 size={15} /></Button>
+                <Button variant="ghost" size="icon" onClick={() => startEdit(item)} aria-label="Edit">
+                  <Pencil size={15} />
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => remove.mutate(item.id)}
+                  aria-label="Delete"
+                >
+                  <Trash2 size={15} />
+                </Button>
               </div>
             )}
           </div>

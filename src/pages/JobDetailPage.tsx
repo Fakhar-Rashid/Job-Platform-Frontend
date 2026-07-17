@@ -36,7 +36,9 @@ export default function JobDetailPage() {
         <Badge variant={job.status.toLowerCase() as 'open' | 'closed'}>{job.status}</Badge>
       </div>
       <p>{job.description}</p>
-      <p className="text-muted">Budget: ${job.budget} · Posted by {job.owner?.name}</p>
+      <p className="text-muted">
+        Budget: ${job.budget} · Posted by {job.owner?.name}
+      </p>
       {notice && <p className="text-muted">{notice}</p>}
 
       {isOwner ? (
@@ -44,7 +46,12 @@ export default function JobDetailPage() {
           <h3>Bids ({bids.length})</h3>
           {bids.length === 0 && <p className="text-muted">No bids yet.</p>}
           {bids.map((bid: Bid) => (
-            <BidCard key={bid.id} bid={bid} canAccept={job.status === 'OPEN'} onAccept={(bidId: string) => acceptBid.mutate(bidId)} />
+            <BidCard
+              key={bid.id}
+              bid={bid}
+              canAccept={job.status === 'OPEN'}
+              onAccept={(bidId: string) => acceptBid.mutate(bidId)}
+            />
           ))}
         </section>
       ) : user && job.status === 'OPEN' ? (

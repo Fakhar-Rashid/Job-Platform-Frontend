@@ -28,7 +28,9 @@ export default function SidebarLinks() {
   return (
     <nav className="flex flex-col gap-3.5 px-5 py-1">
       <div className="flex flex-col gap-0.5">
-        <Link to="/profile" className="font-semibold">Connects: {user.connectBalance}</Link>
+        <Link to="/profile" className="font-semibold">
+          Connects: {user.connectBalance}
+        </Link>
         <button
           className="self-start p-0 text-[13px] font-medium text-brand hover:underline disabled:cursor-not-allowed disabled:opacity-55"
           onClick={handleTopUp}
@@ -38,7 +40,9 @@ export default function SidebarLinks() {
         </button>
       </div>
       {NAV.map(({ label, to }) => (
-        <Link key={label} to={to} className="font-medium">{label}</Link>
+        <Link key={label} to={to} className="font-medium">
+          {label}
+        </Link>
       ))}
     </nav>
   );

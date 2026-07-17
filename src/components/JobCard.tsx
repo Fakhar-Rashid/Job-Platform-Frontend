@@ -11,7 +11,9 @@ export default function JobCard({ job }: JobCardProps) {
   return (
     <Card>
       <div className="flex items-center justify-between gap-3">
-        <h3 className="text-lg"><Link to={`/jobs/${job.id}`}>{job.title}</Link></h3>
+        <h3 className="text-lg">
+          <Link to={`/jobs/${job.id}`}>{job.title}</Link>
+        </h3>
         <Badge variant={job.status.toLowerCase() as 'open' | 'closed'}>{job.status}</Badge>
       </div>
       <p className="text-muted">{job.description}</p>

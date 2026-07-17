@@ -77,18 +77,78 @@ export interface Review {
   author?: { id: string; name: string } | null;
 }
 
-export interface Language { id: string; name: string; proficiency: LanguageProficiency; }
-export interface Education { id: string; school: string; degree?: string | null; fieldOfStudy?: string | null; startYear?: number | null; endYear?: number | null; }
-export interface Employment { id: string; company: string; title: string; startDate?: string | null; endDate?: string | null; current: boolean; description?: string | null; }
-export interface PortfolioItem { id: string; title: string; description?: string | null; category?: string | null; imageUrl?: string | null; projectUrl?: string | null; published: boolean; }
-export interface Certification { id: string; name: string; issuer?: string | null; year?: number | null; }
-export interface License { id: string; name: string; issuer?: string | null; year?: number | null; }
-export interface LinkedAccount { id: string; provider: string; username: string; url?: string | null; }
-export interface OtherExperience { id: string; subject: string; description?: string | null; }
+export interface Language {
+  id: string;
+  name: string;
+  proficiency: LanguageProficiency;
+}
+export interface Education {
+  id: string;
+  school: string;
+  degree?: string | null;
+  fieldOfStudy?: string | null;
+  startYear?: number | null;
+  endYear?: number | null;
+}
+export interface Employment {
+  id: string;
+  company: string;
+  title: string;
+  startDate?: string | null;
+  endDate?: string | null;
+  current: boolean;
+  description?: string | null;
+}
+export interface PortfolioItem {
+  id: string;
+  title: string;
+  description?: string | null;
+  category?: string | null;
+  imageUrl?: string | null;
+  projectUrl?: string | null;
+  published: boolean;
+}
+export interface Certification {
+  id: string;
+  name: string;
+  issuer?: string | null;
+  year?: number | null;
+}
+export interface License {
+  id: string;
+  name: string;
+  issuer?: string | null;
+  year?: number | null;
+}
+export interface LinkedAccount {
+  id: string;
+  provider: string;
+  username: string;
+  url?: string | null;
+}
+export interface OtherExperience {
+  id: string;
+  subject: string;
+  description?: string | null;
+}
 
-export interface ProfileStats { totalEarnings: number; totalJobs: number; reviewCount: number; rating: number | null; }
-export interface Insight { label: string; count: number; }
-export interface CompletedJob { id: string; title: string; jobType: JobType; amount: number; review: (Review & { endorsements: string[] }) | null; }
+export interface ProfileStats {
+  totalEarnings: number;
+  totalJobs: number;
+  reviewCount: number;
+  rating: number | null;
+}
+export interface Insight {
+  label: string;
+  count: number;
+}
+export interface CompletedJob {
+  id: string;
+  title: string;
+  jobType: JobType;
+  amount: number;
+  review: (Review & { endorsements: string[] }) | null;
+}
 
 export interface Profile {
   id: string;

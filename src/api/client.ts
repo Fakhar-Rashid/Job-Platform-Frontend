@@ -12,6 +12,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const isExpiredSession = error.response?.status === 401 && localStorage.getItem(TOKEN_KEY);
+    if (isExpiredSession) {
+      localStorage.removeItem(TOKEN_KEY);
+      if (window.location.pathname !== '/login') window.location.assign('/login');
+    }
+    return Promise.reject(error);
+  },
+);
+
 export function getErrorMessage(error: unknown): string {
   if (axios.isAxiosError(error)) {
     return (error.response?.data as { error?: string })?.error ?? 'Something went wrong';

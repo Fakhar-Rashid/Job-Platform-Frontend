@@ -8,7 +8,9 @@ export default function Footer() {
     <footer className="mx-auto max-w-295 border-t border-hair px-7 pt-5.5 pb-7.5 text-center">
       <nav className="mb-2 flex flex-wrap justify-center gap-5">
         {LINKS.map((label) => (
-          <Link key={label} to="/" className="text-[13px] text-muted">{label}</Link>
+          <Link key={label} to="/" className="text-[13px] text-muted">
+            {label}
+          </Link>
         ))}
       </nav>
       <p className="m-0 text-xs text-muted">© {year} MiniWork. All rights reserved.</p>

@@ -14,7 +14,14 @@ interface CoreSectionProps {
   children?: React.ReactNode;
 }
 
-export default function CoreSection({ title, subtitle, fields, values, editable, children }: CoreSectionProps) {
+export default function CoreSection({
+  title,
+  subtitle,
+  fields,
+  values,
+  editable,
+  children,
+}: CoreSectionProps) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
   const updateCore = useUpdateCore();
@@ -34,7 +41,14 @@ export default function CoreSection({ title, subtitle, fields, values, editable,
       {children}
       {open && (
         <Modal title={`Edit ${title}`} onClose={() => setOpen(false)}>
-          <ItemForm fields={fields} initial={values} onSubmit={submit} onCancel={() => setOpen(false)} error={error} busy={updateCore.isPending} />
+          <ItemForm
+            fields={fields}
+            initial={values}
+            onSubmit={submit}
+            onCancel={() => setOpen(false)}
+            error={error}
+            busy={updateCore.isPending}
+          />
         </Modal>
       )}
     </SectionCard>

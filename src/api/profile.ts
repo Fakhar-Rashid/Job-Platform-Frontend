@@ -1,8 +1,7 @@
 import { api } from './client';
 import type { Profile } from '../types';
 
-export const getProfile = (id: string): Promise<Profile> =>
-  api.get(`/profile/${id}`).then((r) => r.data);
+export const getProfile = (id: string): Promise<Profile> => api.get(`/profile/${id}`).then((r) => r.data);
 export const updateCore = (data: Partial<Profile>): Promise<Profile> =>
   api.patch('/profile', data).then((r) => r.data);
 export const updateSkills = (skills: string[]): Promise<Profile> =>

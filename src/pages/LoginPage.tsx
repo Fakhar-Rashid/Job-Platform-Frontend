@@ -28,11 +28,19 @@ export default function LoginPage() {
   return (
     <form className="flex max-w-md flex-col gap-3.5" onSubmit={handleSubmit}>
       <h2>Login</h2>
-      <label className="flex flex-col gap-1.5 text-sm font-medium">Email<input name="email" type="email" value={form.email} onChange={update} required /></label>
-      <label className="flex flex-col gap-1.5 text-sm font-medium">Password<input name="password" type="password" value={form.password} onChange={update} required /></label>
+      <label className="flex flex-col gap-1.5 text-sm font-medium">
+        Email
+        <input name="email" type="email" value={form.email} onChange={update} required />
+      </label>
+      <label className="flex flex-col gap-1.5 text-sm font-medium">
+        Password
+        <input name="password" type="password" value={form.password} onChange={update} required />
+      </label>
       {error && <p className="text-sm text-danger">{error}</p>}
       <Button type="submit">Login</Button>
-      <p className="text-muted">No account? <Link to="/register">Sign up</Link></p>
+      <p className="text-muted">
+        No account? <Link to="/register">Sign up</Link>
+      </p>
     </form>
   );
 }

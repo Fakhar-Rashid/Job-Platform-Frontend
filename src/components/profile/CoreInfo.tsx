@@ -33,17 +33,27 @@ export default function CoreInfo({ profile, editable }: CoreInfoProps) {
       <div className="mb-3 flex items-start justify-between gap-3">
         <h3 className="text-lg">{profile.title || 'Add your professional title'}</h3>
         <div className="flex items-center gap-3">
-          {profile.hourlyRate != null && <span className="whitespace-nowrap font-semibold">${profile.hourlyRate}.00/hr</span>}
+          {profile.hourlyRate != null && (
+            <span className="whitespace-nowrap font-semibold">${profile.hourlyRate}.00/hr</span>
+          )}
           {editable && (
-            <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={() => setOpen(true)} aria-label="Edit title">
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 rounded-full"
+              onClick={() => setOpen(true)}
+              aria-label="Edit title"
+            >
               <Pencil size={15} />
             </Button>
           )}
         </div>
       </div>
-      {profile.overview
-        ? <p className="whitespace-pre-wrap">{profile.overview}</p>
-        : <p className="text-muted">Add an overview describing what you do.</p>}
+      {profile.overview ? (
+        <p className="whitespace-pre-wrap">{profile.overview}</p>
+      ) : (
+        <p className="text-muted">Add an overview describing what you do.</p>
+      )}
 
       {open && (
         <Modal title="Edit profile summary" onClose={() => setOpen(false)}>

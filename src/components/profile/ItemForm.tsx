@@ -34,18 +34,33 @@ interface FieldProps {
 }
 
 function Field({ field, value, onChange }: FieldProps) {
-  const common = { name: field.name, value, onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => onChange(field.name, e.target.value) };
+  const common = {
+    name: field.name,
+    value,
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
+      onChange(field.name, e.target.value),
+  };
   const labelClass = 'flex flex-col gap-1.5 text-sm font-medium';
 
   if (field.type === 'textarea') {
-    return <label className={labelClass}>{field.label}<textarea rows={field.rows ?? 4} {...common} /></label>;
+    return (
+      <label className={labelClass}>
+        {field.label}
+        <textarea rows={field.rows ?? 4} {...common} />
+      </label>
+    );
   }
   if (field.type === 'select') {
     return (
-      <label className={labelClass}>{field.label}
+      <label className={labelClass}>
+        {field.label}
         <select {...common}>
           <option value="">Select…</option>
-          {field.options!.map(([val, text]) => <option key={val} value={val}>{text}</option>)}
+          {field.options!.map(([val, text]) => (
+            <option key={val} value={val}>
+              {text}
+            </option>
+          ))}
         </select>
       </label>
     );
@@ -58,7 +73,12 @@ function Field({ field, value, onChange }: FieldProps) {
       </label>
     );
   }
-  return <label className={labelClass}>{field.label}<input type={field.type ?? 'text'} {...common} /></label>;
+  return (
+    <label className={labelClass}>
+      {field.label}
+      <input type={field.type ?? 'text'} {...common} />
+    </label>
+  );
 }
 
 export default function ItemForm({ fields, initial, onSubmit, onCancel, error, busy }: ItemFormProps) {
@@ -77,8 +97,12 @@ export default function ItemForm({ fields, initial, onSubmit, onCancel, error, b
       ))}
       {error && <p className="text-sm text-danger">{error}</p>}
       <div className="flex items-center gap-3">
-        <Button type="submit" disabled={busy}>{busy ? 'Saving…' : 'Save'}</Button>
-        <Button type="button" variant="secondary" onClick={onCancel}>Cancel</Button>
+        <Button type="submit" disabled={busy}>
+          {busy ? 'Saving…' : 'Save'}
+        </Button>
+        <Button type="button" variant="secondary" onClick={onCancel}>
+          Cancel
+        </Button>
       </div>
     </form>
   );

@@ -11,7 +11,14 @@ interface SectionCardProps {
   children?: React.ReactNode;
 }
 
-export default function SectionCard({ title, subtitle, editable, onAdd, onEdit, children }: SectionCardProps) {
+export default function SectionCard({
+  title,
+  subtitle,
+  editable,
+  onAdd,
+  onEdit,
+  children,
+}: SectionCardProps) {
   return (
     <Card>
       <div className="mb-3 flex items-start justify-between gap-3">
@@ -22,12 +29,24 @@ export default function SectionCard({ title, subtitle, editable, onAdd, onEdit, 
         {editable && (onAdd || onEdit) && (
           <div className="flex items-center gap-1.5">
             {onEdit && (
-              <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={onEdit} aria-label={`Edit ${title}`}>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 rounded-full"
+                onClick={onEdit}
+                aria-label={`Edit ${title}`}
+              >
                 <Pencil size={15} />
               </Button>
             )}
             {onAdd && (
-              <Button variant="outline" size="icon" className="h-8 w-8 rounded-full" onClick={onAdd} aria-label={`Add to ${title}`}>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-8 w-8 rounded-full"
+                onClick={onAdd}
+                aria-label={`Add to ${title}`}
+              >
                 <Plus size={17} />
               </Button>
             )}

@@ -10,7 +10,12 @@ export default function SavedSearches({ onSelect }: SavedSearchesProps) {
       <b className="mr-1.5">Saved Searches:</b>
       {SAVED.map((term, index) => (
         <span key={term}>
-          <button className="cursor-pointer font-medium text-brand hover:underline" onClick={() => onSelect(term)}>{term}</button>
+          <button
+            className="cursor-pointer font-medium text-brand hover:underline"
+            onClick={() => onSelect(term)}
+          >
+            {term}
+          </button>
           {index < SAVED.length - 1 && <span>, </span>}
         </span>
       ))}

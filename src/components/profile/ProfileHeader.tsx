@@ -49,11 +49,15 @@ export default function ProfileHeader({ profile, editable }: ProfileHeaderProps)
       <div className="flex items-center gap-2.5">
         {editable && (
           <>
-            <Link to={`/users/${profile.id}`}><Button variant="outline">See public view</Button></Link>
+            <Link to={`/users/${profile.id}`}>
+              <Button variant="outline">See public view</Button>
+            </Link>
             <Button onClick={() => setOpen(true)}>Profile settings</Button>
           </>
         )}
-        <Button variant="ghost" className="gap-1.5"><Share2 size={16} /> Share</Button>
+        <Button variant="ghost" className="gap-1.5">
+          <Share2 size={16} /> Share
+        </Button>
       </div>
 
       {open && (
@@ -65,7 +69,12 @@ export default function ProfileHeader({ profile, editable }: ProfileHeaderProps)
               { name: 'country', label: 'Country' },
               { name: 'avatarUrl', label: 'Avatar URL' },
             ]}
-            initial={{ name: profile.name, city: profile.city, country: profile.country, avatarUrl: profile.avatarUrl }}
+            initial={{
+              name: profile.name,
+              city: profile.city,
+              country: profile.country,
+              avatarUrl: profile.avatarUrl,
+            }}
             onSubmit={submit}
             onCancel={() => setOpen(false)}
             error={error}

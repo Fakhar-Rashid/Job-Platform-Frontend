@@ -34,14 +34,22 @@ export default function WorkHistorySection({ profile, editable }: WorkHistorySec
 
       {insights.length > 0 && (
         <>
-          <h4 className="mt-4.5 mb-2 border-b border-hair pb-1.5 text-[15px]">Insights from completed jobs</h4>
+          <h4 className="mt-4.5 mb-2 border-b border-hair pb-1.5 text-[15px]">
+            Insights from completed jobs
+          </h4>
           <div className="flex flex-wrap gap-2">
-            {insights.map((i) => <Pill key={i.label}>{i.label} {i.count}</Pill>)}
+            {insights.map((i) => (
+              <Pill key={i.label}>
+                {i.label} {i.count}
+              </Pill>
+            ))}
           </div>
         </>
       )}
 
-      <h4 className="mt-4.5 mb-2 border-b border-hair pb-1.5 text-[15px]">Completed jobs ({completedJobs.length})</h4>
+      <h4 className="mt-4.5 mb-2 border-b border-hair pb-1.5 text-[15px]">
+        Completed jobs ({completedJobs.length})
+      </h4>
       {completedJobs.length === 0 && <p className="text-muted">No completed jobs yet.</p>}
       {completedJobs.map((job) => (
         <div className="border-t border-hair py-3.5" key={job.id}>
@@ -55,14 +63,18 @@ export default function WorkHistorySection({ profile, editable }: WorkHistorySec
               <p className="mt-1 text-[13px]">“{job.review.comment}”</p>
               {job.review.endorsements.length > 0 && (
                 <div className="flex flex-wrap gap-2">
-                  {job.review.endorsements.map((e) => <Pill key={e}>{e}</Pill>)}
+                  {job.review.endorsements.map((e) => (
+                    <Pill key={e}>{e}</Pill>
+                  ))}
                 </div>
               )}
             </>
           ) : (
             <p className="text-muted">Awaiting client review.</p>
           )}
-          <div className="text-muted">${job.amount} · {priceLabel(job.jobType)}</div>
+          <div className="text-muted">
+            ${job.amount} · {priceLabel(job.jobType)}
+          </div>
         </div>
       ))}
     </SectionCard>

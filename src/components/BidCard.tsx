@@ -19,9 +19,7 @@ export default function BidCard({ bid, onAccept, canAccept }: BidCardProps) {
       <p className="text-muted">{bid.coverLetter}</p>
       <div className="flex items-center justify-between gap-3">
         <span>Offer: ${bid.amount}</span>
-        {canAccept && bid.status === 'PENDING' && (
-          <Button onClick={() => onAccept(bid.id)}>Accept</Button>
-        )}
+        {canAccept && bid.status === 'PENDING' && <Button onClick={() => onAccept(bid.id)}>Accept</Button>}
       </div>
     </Card>
   );

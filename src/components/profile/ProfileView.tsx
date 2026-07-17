@@ -2,10 +2,24 @@ import ProfileHeader from './ProfileHeader';
 import CoreInfo from './CoreInfo';
 import SkillsSection from './SkillsSection';
 import WorkHistorySection from './WorkHistorySection';
-import { StatsCard, PromoteCard, VerificationsCard, HoursCard, ResponseCard, VideoCard, ConnectsCard } from './AsideCards';
 import {
-  LanguagesSection, EducationSection, EmploymentSection, PortfolioListSection,
-  CertificationsSection, LicensesSection, LinkedAccountsSection, OtherExperiencesSection,
+  StatsCard,
+  PromoteCard,
+  VerificationsCard,
+  HoursCard,
+  ResponseCard,
+  VideoCard,
+  ConnectsCard,
+} from './AsideCards';
+import {
+  LanguagesSection,
+  EducationSection,
+  EmploymentSection,
+  PortfolioListSection,
+  CertificationsSection,
+  LicensesSection,
+  LinkedAccountsSection,
+  OtherExperiencesSection,
 } from './ListSections';
 import Card from '../ui/Card';
 import type { Profile } from '../../types';
@@ -24,9 +38,15 @@ interface PlaceholderCardProps {
 function PlaceholderCard({ title, text, action }: PlaceholderCardProps) {
   return (
     <Card>
-      <div className="mb-3 flex items-start justify-between gap-3"><h3 className="text-lg">{title}</h3></div>
+      <div className="mb-3 flex items-start justify-between gap-3">
+        <h3 className="text-lg">{title}</h3>
+      </div>
       <p className="text-muted">{text}</p>
-      {action && <p><span className="font-medium text-brand">{action}</span></p>}
+      {action && (
+        <p>
+          <span className="font-medium text-brand">{action}</span>
+        </p>
+      )}
     </Card>
   );
 }
@@ -58,8 +78,16 @@ export default function ProfileView({ profile, editable }: ProfileViewProps) {
           <PortfolioListSection {...shared} />
           <WorkHistorySection {...shared} />
           <SkillsSection {...shared} />
-          <PlaceholderCard title="Your project catalog" text="Create project offerings that highlight your strengths and attract more clients." action="Manage projects" />
-          <PlaceholderCard title="Testimonials" text="Showcase your skills with client testimonials." action="Request a testimonial" />
+          <PlaceholderCard
+            title="Your project catalog"
+            text="Create project offerings that highlight your strengths and attract more clients."
+            action="Manage projects"
+          />
+          <PlaceholderCard
+            title="Testimonials"
+            text="Showcase your skills with client testimonials."
+            action="Request a testimonial"
+          />
           <CertificationsSection {...shared} />
           <EmploymentSection {...shared} />
           <OtherExperiencesSection {...shared} />

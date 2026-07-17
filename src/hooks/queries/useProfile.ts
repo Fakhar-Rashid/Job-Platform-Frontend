@@ -28,8 +28,18 @@ export function useUpdateSkills() {
 export function useChildMutations(path: string) {
   const invalidate = useInvalidateProfile();
   return {
-    create: useMutation({ mutationFn: (data: Record<string, unknown>) => profileApi.createChild(path, data), onSuccess: invalidate }),
-    update: useMutation({ mutationFn: ({ id, data }: { id: string; data: Record<string, unknown> }) => profileApi.updateChild(path, id, data), onSuccess: invalidate }),
-    remove: useMutation({ mutationFn: (id: string) => profileApi.deleteChild(path, id), onSuccess: invalidate }),
+    create: useMutation({
+      mutationFn: (data: Record<string, unknown>) => profileApi.createChild(path, data),
+      onSuccess: invalidate,
+    }),
+    update: useMutation({
+      mutationFn: ({ id, data }: { id: string; data: Record<string, unknown> }) =>
+        profileApi.updateChild(path, id, data),
+      onSuccess: invalidate,
+    }),
+    remove: useMutation({
+      mutationFn: (id: string) => profileApi.deleteChild(path, id),
+      onSuccess: invalidate,
+    }),
   };
 }

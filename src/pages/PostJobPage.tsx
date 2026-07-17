@@ -32,11 +32,22 @@ export default function PostJobPage() {
   return (
     <form className="flex max-w-md flex-col gap-3.5" onSubmit={handleSubmit}>
       <h2>Post a job</h2>
-      <label className="flex flex-col gap-1.5 text-sm font-medium">Title<input name="title" value={form.title} onChange={update} required /></label>
-      <label className="flex flex-col gap-1.5 text-sm font-medium">Description<textarea name="description" rows={5} value={form.description} onChange={update} required /></label>
-      <label className="flex flex-col gap-1.5 text-sm font-medium">Budget ($)<input name="budget" type="number" min="1" value={form.budget} onChange={update} required /></label>
+      <label className="flex flex-col gap-1.5 text-sm font-medium">
+        Title
+        <input name="title" value={form.title} onChange={update} required />
+      </label>
+      <label className="flex flex-col gap-1.5 text-sm font-medium">
+        Description
+        <textarea name="description" rows={5} value={form.description} onChange={update} required />
+      </label>
+      <label className="flex flex-col gap-1.5 text-sm font-medium">
+        Budget ($)
+        <input name="budget" type="number" min="1" value={form.budget} onChange={update} required />
+      </label>
       {error && <p className="text-sm text-danger">{error}</p>}
-      <Button type="submit" disabled={createJob.isPending}>{createJob.isPending ? 'Publishing…' : 'Publish job'}</Button>
+      <Button type="submit" disabled={createJob.isPending}>
+        {createJob.isPending ? 'Publishing…' : 'Publish job'}
+      </Button>
     </form>
   );
 }

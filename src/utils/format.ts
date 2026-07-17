@@ -26,13 +26,27 @@ export function money(amount = 0): string {
 }
 
 export function experienceLabel(level: ExperienceLevel): string {
-  const map: Record<ExperienceLevel, string> = { ENTRY: 'Entry level', INTERMEDIATE: 'Intermediate', EXPERT: 'Expert' };
+  const map: Record<ExperienceLevel, string> = {
+    ENTRY: 'Entry level',
+    INTERMEDIATE: 'Intermediate',
+    EXPERT: 'Expert',
+  };
   return map[level] ?? 'Entry level';
 }
 
 const MONTHS = [
-  'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December',
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 export function monthLabel(value: string | null | undefined): string {

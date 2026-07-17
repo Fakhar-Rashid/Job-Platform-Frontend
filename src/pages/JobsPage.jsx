@@ -5,7 +5,7 @@ import FeedTabs from '../components/feed/FeedTabs.jsx';
 import JobFeedCard from '../components/feed/JobFeedCard.jsx';
 import ProfileCard from '../components/sidebar/ProfileCard.jsx';
 import ReachMoreClients from '../components/sidebar/ReachMoreClients.jsx';
-import ConnectsCard from '../components/sidebar/ConnectsCard.jsx';
+import SidebarLinks from '../components/sidebar/SidebarLinks.jsx';
 import * as jobsApi from '../api/jobs.js';
 import { getErrorMessage } from '../api/client.js';
 
@@ -55,7 +55,7 @@ export default function JobsPage() {
       <aside className="side-col">
         <ProfileCard />
         <ReachMoreClients />
-        <ConnectsCard />
+        <SidebarLinks />
       </aside>
     </div>
   );

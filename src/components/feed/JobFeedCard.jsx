@@ -3,11 +3,17 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ThumbsDown, Heart, BadgeCheck, Star, MapPin } from 'lucide-react';
 import { timeAgo, proposalRange, money, experienceLabel } from '../../utils/format.js';
 
+const MAX_SKILLS = 4;
+
 export default function JobFeedCard({ job, onDismiss }) {
   const navigate = useNavigate();
   const [saved, setSaved] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const owner = job.owner ?? {};
   const type = job.jobType === 'HOURLY' ? 'Hourly' : 'Fixed price';
+  const skills = job.skills ?? [];
+  const shownSkills = skills.slice(0, MAX_SKILLS);
+  const extraSkills = skills.length - shownSkills.length;
 
   function stop(event, action) {
     event.stopPropagation();
@@ -39,11 +45,17 @@ export default function JobFeedCard({ job, onDismiss }) {
         {job.durationLabel ? ` - Est. Time: ${job.durationLabel}` : ''}
       </p>
 
-      <p className="desc">{job.description}</p>
+      <p className={`desc ${expanded ? '' : 'clamp'}`}>{job.description}</p>
+      {job.description.length > 140 && (
+        <button className="more-link" onClick={(e) => stop(e, () => setExpanded((v) => !v))}>
+          {expanded ? 'less' : 'more'}
+        </button>
+      )}
 
-      {job.skills?.length > 0 && (
+      {skills.length > 0 && (
         <div className="pills">
-          {job.skills.map((skill) => <span className="pill" key={skill}>{skill}</span>)}
+          {shownSkills.map((skill) => <span className="pill" key={skill}>{skill}</span>)}
+          {extraSkills > 0 && <span className="pill">+{extraSkills}</span>}
         </div>
       )}
 

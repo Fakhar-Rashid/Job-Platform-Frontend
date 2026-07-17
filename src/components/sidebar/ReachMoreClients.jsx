@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronUp, Info, Pencil } from 'lucide-react';
+import { ChevronUp, ChevronDown, Info, Pencil } from 'lucide-react';
 
 function ToggleRow({ label, value, onEdit }) {
   return (
@@ -16,14 +16,24 @@ function ToggleRow({ label, value, onEdit }) {
 }
 
 export default function ReachMoreClients() {
+  const [open, setOpen] = useState(true);
   const [availability, setAvailability] = useState(false);
   const [boost, setBoost] = useState(true);
 
   return (
     <div className="side-card">
-      <h4>Reach more clients <ChevronUp size={18} className="muted" /></h4>
-      <ToggleRow label="Availability badge" value={availability} onEdit={() => setAvailability((v) => !v)} />
-      <ToggleRow label="Boost your profile" value={boost} onEdit={() => setBoost((v) => !v)} />
+      <h4>
+        Reach more clients
+        <button className="toggle-pencil" aria-label="Toggle section" onClick={() => setOpen((o) => !o)}>
+          {open ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        </button>
+      </h4>
+      {open && (
+        <>
+          <ToggleRow label="Availability badge" value={availability} onEdit={() => setAvailability((v) => !v)} />
+          <ToggleRow label="Boost your profile" value={boost} onEdit={() => setBoost((v) => !v)} />
+        </>
+      )}
     </div>
   );
 }

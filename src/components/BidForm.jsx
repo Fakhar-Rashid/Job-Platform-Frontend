@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useAuth } from '../hooks/useAuth.js';
 import Button from './ui/Button.jsx';
-import * as bidsApi from '../api/bids.js';
+import { usePlaceBid } from '../hooks/queries/useBids.js';
 import { getErrorMessage } from '../api/client.js';
 
 export default function BidForm({ jobId, onBid }) {
   const { refreshUser } = useAuth();
+  const placeBid = usePlaceBid(jobId);
   const [form, setForm] = useState({ amount: '', coverLetter: '' });
   const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
 
   function update(event) {
     setForm({ ...form, [event.target.name]: event.target.value });
@@ -17,15 +17,12 @@ export default function BidForm({ jobId, onBid }) {
   async function handleSubmit(event) {
     event.preventDefault();
     setError('');
-    setBusy(true);
     try {
-      await bidsApi.placeBid(jobId, form);
+      await placeBid.mutateAsync(form);
       await refreshUser();
       onBid();
     } catch (err) {
       setError(getErrorMessage(err));
-    } finally {
-      setBusy(false);
     }
   }
 
@@ -39,7 +36,7 @@ export default function BidForm({ jobId, onBid }) {
         <textarea name="coverLetter" rows="4" value={form.coverLetter} onChange={update} required />
       </label>
       {error && <p className="text-danger text-sm">{error}</p>}
-      <Button type="submit" disabled={busy}>Bid (costs 5 connects)</Button>
+      <Button type="submit" disabled={placeBid.isPending}>Bid (costs 5 connects)</Button>
     </form>
   );
 }

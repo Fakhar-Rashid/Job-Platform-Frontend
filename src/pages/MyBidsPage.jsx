@@ -1,23 +1,19 @@
-import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import * as bidsApi from '../api/bids.js';
-import { getErrorMessage } from '../api/client.js';
 import Card from '../components/ui/Card.jsx';
 import Badge from '../components/ui/Badge.jsx';
+import { useMyBids } from '../hooks/queries/useBids.js';
+import { getErrorMessage } from '../api/client.js';
 
 export default function MyBidsPage() {
-  const [bids, setBids] = useState([]);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    bidsApi.myBids().then(setBids).catch((err) => setError(getErrorMessage(err)));
-  }, []);
+  const { data: bids = [], error, isLoading } = useMyBids();
 
   return (
     <>
       <h2>My bids</h2>
-      {error && <p className="text-sm text-danger">{error}</p>}
-      {bids.length === 0 ? (
+      {error && <p className="text-sm text-danger">{getErrorMessage(error)}</p>}
+      {isLoading ? (
+        <p className="text-muted">Loading…</p>
+      ) : bids.length === 0 ? (
         <p className="text-muted">You haven't placed any bids yet.</p>
       ) : (
         bids.map((bid) => (

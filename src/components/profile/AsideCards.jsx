@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BadgeCheck } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import CoreSection from './CoreSection.jsx';
 import Card from '../ui/Card.jsx';
 import Button from '../ui/Button.jsx';
@@ -18,10 +19,10 @@ export function StatsCard({ profile }) {
   );
 }
 
-export function PromoteCard({ profile, editable, onChanged }) {
+export function PromoteCard({ profile, editable }) {
   return (
     <CoreSection
-      title="Promote with ads" editable={editable} onChanged={onChanged}
+      title="Promote with ads" editable={editable}
       values={{ availabilityBadge: profile.availabilityBadge, boostProfile: profile.boostProfile }}
       fields={[
         { name: 'availabilityBadge', label: 'Availability badge', type: 'checkbox' },
@@ -34,11 +35,11 @@ export function PromoteCard({ profile, editable, onChanged }) {
   );
 }
 
-export function VerificationsCard({ profile, editable, onChanged }) {
+export function VerificationsCard({ profile, editable }) {
   const rows = [['ID', profile.idVerified], ['Phone number', profile.phoneVerified], ['Military veteran', profile.militaryVeteran]];
   return (
     <CoreSection
-      title="Verifications" editable={editable} onChanged={onChanged}
+      title="Verifications" editable={editable}
       values={{ idVerified: profile.idVerified, phoneVerified: profile.phoneVerified, militaryVeteran: profile.militaryVeteran }}
       fields={[
         { name: 'idVerified', label: 'ID verified', type: 'checkbox' },
@@ -56,10 +57,10 @@ export function VerificationsCard({ profile, editable, onChanged }) {
   );
 }
 
-export function HoursCard({ profile, editable, onChanged }) {
+export function HoursCard({ profile, editable }) {
   return (
     <CoreSection
-      title="Hours per week" editable={editable} onChanged={onChanged}
+      title="Hours per week" editable={editable}
       values={{ hoursPerWeek: profile.hoursPerWeek ?? '', openToContractToHire: profile.openToContractToHire }}
       fields={[
         { name: 'hoursPerWeek', label: 'Availability', type: 'select', options: HOURS_OPTIONS },
@@ -72,10 +73,10 @@ export function HoursCard({ profile, editable, onChanged }) {
   );
 }
 
-export function ResponseCard({ profile, editable, onChanged }) {
+export function ResponseCard({ profile, editable }) {
   return (
     <CoreSection
-      title="Avg. response" editable={editable} onChanged={onChanged}
+      title="Avg. response" editable={editable}
       values={{ responseTime: profile.responseTime ?? '' }}
       fields={[{ name: 'responseTime', label: 'Average response time' }]}
     >
@@ -84,10 +85,10 @@ export function ResponseCard({ profile, editable, onChanged }) {
   );
 }
 
-export function VideoCard({ profile, editable, onChanged }) {
+export function VideoCard({ profile, editable }) {
   return (
     <CoreSection
-      title="Video introduction" editable={editable} onChanged={onChanged}
+      title="Video introduction" editable={editable}
       values={{ videoIntroUrl: profile.videoIntroUrl ?? '' }}
       fields={[{ name: 'videoIntroUrl', label: 'Video URL' }]}
     >
@@ -98,8 +99,9 @@ export function VideoCard({ profile, editable, onChanged }) {
   );
 }
 
-export function ConnectsCard({ profile, onChanged }) {
+export function ConnectsCard({ profile }) {
   const { refreshUser } = useAuth();
+  const qc = useQueryClient();
   const [busy, setBusy] = useState(false);
 
   async function buy() {
@@ -107,7 +109,7 @@ export function ConnectsCard({ profile, onChanged }) {
     try {
       await connectsApi.topUp();
       await refreshUser();
-      onChanged();
+      qc.invalidateQueries({ queryKey: ['profile'] });
     } finally {
       setBusy(false);
     }

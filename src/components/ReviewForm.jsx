@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Button from './ui/Button.jsx';
-import * as reviewsApi from '../api/reviews.js';
+import { useCreateReview } from '../hooks/queries/useReview.js';
 import { getErrorMessage } from '../api/client.js';
 
 const ENDORSEMENTS = [
@@ -9,11 +9,11 @@ const ENDORSEMENTS = [
 ];
 
 export default function ReviewForm({ jobId, onDone }) {
+  const createReview = useCreateReview(jobId);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
   const [picked, setPicked] = useState([]);
   const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
 
   function toggle(tag) {
     setPicked((prev) => (prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]));
@@ -21,15 +21,12 @@ export default function ReviewForm({ jobId, onDone }) {
 
   async function submit(event) {
     event.preventDefault();
-    setBusy(true);
     setError('');
     try {
-      await reviewsApi.createReview(jobId, { rating, comment, endorsements: picked });
+      await createReview.mutateAsync({ rating, comment, endorsements: picked });
       onDone();
     } catch (err) {
       setError(getErrorMessage(err));
-    } finally {
-      setBusy(false);
     }
   }
 
@@ -55,7 +52,7 @@ export default function ReviewForm({ jobId, onDone }) {
         </div>
       </div>
       {error && <p className="text-danger text-sm">{error}</p>}
-      <Button type="submit" disabled={busy}>{busy ? 'Submitting…' : 'Submit review'}</Button>
+      <Button type="submit" disabled={createReview.isPending}>{createReview.isPending ? 'Submitting…' : 'Submit review'}</Button>
     </form>
   );
 }

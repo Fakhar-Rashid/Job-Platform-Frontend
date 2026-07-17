@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import SearchBar from '../components/feed/SearchBar.jsx';
 import SavedSearches from '../components/feed/SavedSearches.jsx';
 import FeedTabs from '../components/feed/FeedTabs.jsx';
@@ -6,7 +6,8 @@ import JobFeedCard from '../components/feed/JobFeedCard.jsx';
 import ProfileCard from '../components/sidebar/ProfileCard.jsx';
 import ReachMoreClients from '../components/sidebar/ReachMoreClients.jsx';
 import SidebarLinks from '../components/sidebar/SidebarLinks.jsx';
-import * as jobsApi from '../api/jobs.js';
+import Button from '../components/ui/Button.jsx';
+import { useInfiniteJobs } from '../hooks/queries/useJobs.js';
 import { getErrorMessage } from '../api/client.js';
 
 const INTRO = {
@@ -15,20 +16,26 @@ const INTRO = {
 };
 
 export default function JobsPage() {
-  const [jobs, setJobs] = useState([]);
   const [search, setSearch] = useState('');
+  const [debounced, setDebounced] = useState('');
   const [tab, setTab] = useState('Best matches');
   const [dismissed, setDismissed] = useState([]);
-  const [error, setError] = useState('');
 
   useEffect(() => {
-    const params = { status: 'OPEN' };
-    if (search.trim()) params.search = search.trim();
-    jobsApi.listJobs(params).then(setJobs).catch((err) => setError(getErrorMessage(err)));
+    const timer = setTimeout(() => setDebounced(search.trim()), 300);
+    return () => clearTimeout(timer);
   }, [search]);
 
+  const filters = useMemo(
+    () => ({ status: 'OPEN', ...(debounced ? { search: debounced } : {}) }),
+    [debounced],
+  );
   const hasFeed = tab === 'Best matches' || tab === 'Most recent';
-  const visible = jobs.filter((job) => !dismissed.includes(job.id));
+  const {
+    data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage,
+  } = useInfiniteJobs(filters);
+
+  const jobs = (data?.pages.flatMap((page) => page.items) ?? []).filter((job) => !dismissed.includes(job.id));
 
   return (
     <div className="grid grid-cols-1 items-start gap-7 lg:grid-cols-[minmax(0,1fr)_300px]">
@@ -38,17 +45,26 @@ export default function JobsPage() {
         <FeedTabs active={tab} onSelect={setTab} onToggleFilters={() => {}} />
         <p className="mb-1 mt-4.5 text-muted">{INTRO[tab] ?? 'Nothing here yet — check back soon.'}</p>
 
-        {error && <p className="text-sm text-danger">{error}</p>}
-        {!hasFeed || visible.length === 0 ? (
+        {error && <p className="text-sm text-danger">{getErrorMessage(error)}</p>}
+        {!hasFeed ? (
+          <p className="py-6 text-muted">Nothing here yet — check back soon.</p>
+        ) : isLoading ? (
+          <p className="py-6 text-muted">Loading jobs…</p>
+        ) : jobs.length === 0 ? (
           <p className="py-6 text-muted">No jobs to show right now.</p>
         ) : (
-          visible.map((job) => (
-            <JobFeedCard
-              key={job.id}
-              job={job}
-              onDismiss={(id) => setDismissed((prev) => [...prev, id])}
-            />
-          ))
+          <>
+            {jobs.map((job) => (
+              <JobFeedCard key={job.id} job={job} onDismiss={(id) => setDismissed((prev) => [...prev, id])} />
+            ))}
+            {hasNextPage && (
+              <div className="py-6 text-center">
+                <Button variant="outline" onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
+                  {isFetchingNextPage ? 'Loading…' : 'Load more jobs'}
+                </Button>
+              </div>
+            )}
+          </>
         )}
       </section>
 

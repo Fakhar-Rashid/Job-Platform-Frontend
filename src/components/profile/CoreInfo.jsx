@@ -4,25 +4,21 @@ import Modal from './Modal.jsx';
 import ItemForm from './ItemForm.jsx';
 import Button from '../ui/Button.jsx';
 import Card from '../ui/Card.jsx';
-import * as profileApi from '../../api/profile.js';
+import { useUpdateCore } from '../../hooks/queries/useProfile.js';
 import { getErrorMessage } from '../../api/client.js';
 
-export default function CoreInfo({ profile, editable, onChanged }) {
+export default function CoreInfo({ profile, editable }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
+  const updateCore = useUpdateCore();
 
   async function submit(next) {
-    setBusy(true);
     setError('');
     try {
-      await profileApi.updateCore(next);
+      await updateCore.mutateAsync(next);
       setOpen(false);
-      onChanged();
     } catch (err) {
       setError(getErrorMessage(err));
-    } finally {
-      setBusy(false);
     }
   }
 
@@ -55,7 +51,7 @@ export default function CoreInfo({ profile, editable, onChanged }) {
             onSubmit={submit}
             onCancel={() => setOpen(false)}
             error={error}
-            busy={busy}
+            busy={updateCore.isPending}
           />
         </Modal>
       )}

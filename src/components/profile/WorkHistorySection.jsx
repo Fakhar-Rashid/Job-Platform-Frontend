@@ -1,20 +1,20 @@
 import SectionCard from './SectionCard.jsx';
 import Stars from './Stars.jsx';
 import Pill from '../ui/Pill.jsx';
-import * as profileApi from '../../api/profile.js';
+import { useUpdateCore } from '../../hooks/queries/useProfile.js';
 
 function priceLabel(type) {
   return type === 'HOURLY' ? 'Hourly' : 'Fixed price';
 }
 
-export default function WorkHistorySection({ profile, editable, onChanged }) {
+export default function WorkHistorySection({ profile, editable }) {
   const { completedJobs, insights, showWorkHistory } = profile;
+  const updateCore = useUpdateCore();
 
   if (!editable && !showWorkHistory) return null;
 
-  async function toggle(event) {
-    await profileApi.updateCore({ showWorkHistory: event.target.checked });
-    onChanged();
+  function toggle(event) {
+    updateCore.mutate({ showWorkHistory: event.target.checked });
   }
 
   return (

@@ -3,10 +3,10 @@ import { PROFICIENCY_LABEL, monthLabel } from '../../utils/format.js';
 
 const PROFICIENCY_OPTIONS = Object.entries(PROFICIENCY_LABEL);
 
-export function LanguagesSection({ profile, editable, onChanged }) {
+export function LanguagesSection({ profile, editable }) {
   return (
     <EditableList
-      title="Languages" path="languages" items={profile.languages} editable={editable} onChanged={onChanged}
+      title="Languages" path="languages" items={profile.languages} editable={editable}
       emptyText="No languages added yet."
       fields={[
         { name: 'name', label: 'Language' },
@@ -17,10 +17,10 @@ export function LanguagesSection({ profile, editable, onChanged }) {
   );
 }
 
-export function EducationSection({ profile, editable, onChanged }) {
+export function EducationSection({ profile, editable }) {
   return (
     <EditableList
-      title="Education" path="educations" items={profile.educations} editable={editable} onChanged={onChanged}
+      title="Education" path="educations" items={profile.educations} editable={editable}
       emptyText="No education added yet."
       fields={[
         { name: 'school', label: 'School' },
@@ -40,10 +40,10 @@ export function EducationSection({ profile, editable, onChanged }) {
   );
 }
 
-export function EmploymentSection({ profile, editable, onChanged }) {
+export function EmploymentSection({ profile, editable }) {
   return (
     <EditableList
-      title="Employment history" path="employments" items={profile.employments} editable={editable} onChanged={onChanged}
+      title="Employment history" path="employments" items={profile.employments} editable={editable}
       emptyText="No employment history yet."
       fields={[
         { name: 'company', label: 'Company' },
@@ -64,10 +64,10 @@ export function EmploymentSection({ profile, editable, onChanged }) {
   );
 }
 
-export function PortfolioListSection({ profile, editable, onChanged }) {
+export function PortfolioListSection({ profile, editable }) {
   return (
     <EditableList
-      title="Portfolio" path="portfolio" items={profile.portfolioItems} editable={editable} onChanged={onChanged}
+      title="Portfolio" path="portfolio" items={profile.portfolioItems} editable={editable}
       emptyText="No portfolio projects yet."
       fields={[
         { name: 'title', label: 'Project title' },
@@ -90,10 +90,10 @@ export function PortfolioListSection({ profile, editable, onChanged }) {
   );
 }
 
-export function CertificationsSection({ profile, editable, onChanged }) {
+export function CertificationsSection({ profile, editable }) {
   return (
     <EditableList
-      title="Certifications" path="certifications" items={profile.certifications} editable={editable} onChanged={onChanged}
+      title="Certifications" path="certifications" items={profile.certifications} editable={editable}
       emptyText="Listing your certifications can help prove your knowledge."
       fields={[
         { name: 'name', label: 'Certification' },
@@ -105,10 +105,10 @@ export function CertificationsSection({ profile, editable, onChanged }) {
   );
 }
 
-export function LicensesSection({ profile, editable, onChanged }) {
+export function LicensesSection({ profile, editable }) {
   return (
     <EditableList
-      title="Licenses" path="licenses" items={profile.licenses} editable={editable} onChanged={onChanged}
+      title="Licenses" path="licenses" items={profile.licenses} editable={editable}
       emptyText="No licenses added yet."
       fields={[
         { name: 'name', label: 'License' },
@@ -120,10 +120,10 @@ export function LicensesSection({ profile, editable, onChanged }) {
   );
 }
 
-export function LinkedAccountsSection({ profile, editable, onChanged }) {
+export function LinkedAccountsSection({ profile, editable }) {
   return (
     <EditableList
-      title="Linked accounts" path="linked-accounts" items={profile.linkedAccounts} editable={editable} onChanged={onChanged}
+      title="Linked accounts" path="linked-accounts" items={profile.linkedAccounts} editable={editable}
       emptyText="No linked accounts yet."
       fields={[
         { name: 'provider', label: 'Provider' },
@@ -140,10 +140,10 @@ export function LinkedAccountsSection({ profile, editable, onChanged }) {
   );
 }
 
-export function OtherExperiencesSection({ profile, editable, onChanged }) {
+export function OtherExperiencesSection({ profile, editable }) {
   return (
     <EditableList
-      title="Other experiences" path="other-experiences" items={profile.otherExperiences} editable={editable} onChanged={onChanged}
+      title="Other experiences" path="other-experiences" items={profile.otherExperiences} editable={editable}
       emptyText="Add other experiences to stand out."
       fields={[
         { name: 'subject', label: 'Subject' },

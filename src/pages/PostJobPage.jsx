@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as jobsApi from '../api/jobs.js';
-import { getErrorMessage } from '../api/client.js';
 import Button from '../components/ui/Button.jsx';
+import { useCreateJob } from '../hooks/queries/useJobs.js';
+import { getErrorMessage } from '../api/client.js';
 
 export default function PostJobPage() {
   const navigate = useNavigate();
+  const createJob = useCreateJob();
   const [form, setForm] = useState({ title: '', description: '', budget: '' });
   const [error, setError] = useState('');
 
@@ -17,7 +18,7 @@ export default function PostJobPage() {
     event.preventDefault();
     setError('');
     try {
-      const job = await jobsApi.createJob(form);
+      const job = await createJob.mutateAsync(form);
       navigate(`/jobs/${job.id}`);
     } catch (err) {
       setError(getErrorMessage(err));
@@ -31,7 +32,7 @@ export default function PostJobPage() {
       <label className="flex flex-col gap-1.5 text-sm font-medium">Description<textarea name="description" rows="5" value={form.description} onChange={update} required /></label>
       <label className="flex flex-col gap-1.5 text-sm font-medium">Budget ($)<input name="budget" type="number" min="1" value={form.budget} onChange={update} required /></label>
       {error && <p className="text-sm text-danger">{error}</p>}
-      <Button type="submit">Publish job</Button>
+      <Button type="submit" disabled={createJob.isPending}>{createJob.isPending ? 'Publishing…' : 'Publish job'}</Button>
     </form>
   );
 }

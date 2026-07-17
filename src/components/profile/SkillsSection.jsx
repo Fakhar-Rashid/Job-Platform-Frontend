@@ -3,14 +3,15 @@ import { X } from 'lucide-react';
 import SectionCard from './SectionCard.jsx';
 import Button from '../ui/Button.jsx';
 import Pill from '../ui/Pill.jsx';
-import * as profileApi from '../../api/profile.js';
+import { useUpdateSkills } from '../../hooks/queries/useProfile.js';
 import { getErrorMessage } from '../../api/client.js';
 
-export default function SkillsSection({ profile, editable, onChanged }) {
+export default function SkillsSection({ profile, editable }) {
   const [editing, setEditing] = useState(false);
   const [skills, setSkills] = useState(profile.skills);
   const [value, setValue] = useState('');
   const [error, setError] = useState('');
+  const updateSkills = useUpdateSkills();
 
   function addSkill(event) {
     event.preventDefault();
@@ -22,9 +23,8 @@ export default function SkillsSection({ profile, editable, onChanged }) {
   async function save() {
     setError('');
     try {
-      await profileApi.updateSkills(skills);
+      await updateSkills.mutateAsync(skills);
       setEditing(false);
-      onChanged();
     } catch (err) {
       setError(getErrorMessage(err));
     }

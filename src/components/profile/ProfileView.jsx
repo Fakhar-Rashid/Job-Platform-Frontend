@@ -19,8 +19,8 @@ function PlaceholderCard({ title, text, action }) {
   );
 }
 
-export default function ProfileView({ profile, editable, onChanged }) {
-  const shared = { profile, editable, onChanged };
+export default function ProfileView({ profile, editable }) {
+  const shared = { profile, editable };
 
   return (
     <div className="flex flex-col gap-4.5">
@@ -29,7 +29,7 @@ export default function ProfileView({ profile, editable, onChanged }) {
       <div className="grid grid-cols-1 items-start gap-4.5 lg:grid-cols-[300px_minmax(0,1fr)]">
         <aside className="flex flex-col gap-4">
           <StatsCard profile={profile} />
-          {editable && <ConnectsCard profile={profile} onChanged={onChanged} />}
+          {editable && <ConnectsCard profile={profile} />}
           <PromoteCard {...shared} />
           <VideoCard {...shared} />
           <HoursCard {...shared} />

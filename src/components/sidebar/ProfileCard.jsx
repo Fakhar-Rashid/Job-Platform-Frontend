@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth.js';
+import { avatarFor } from '../../utils/avatar.js';
 
 export default function ProfileCard() {
   const { user } = useAuth();
@@ -17,10 +18,10 @@ export default function ProfileCard() {
   return (
     <div className="side-card">
       <div className="profile-head">
-        <img src={`https://i.pravatar.cc/104?u=${user.id}`} alt="" />
+        <img src={avatarFor(user, 104)} alt="" />
         <div>
           <Link to="/profile" className="name">{user.name}</Link>
-          <div className="title">Mobile App Developer | React &amp; Node</div>
+          <div className="title">{user.title || 'Add your professional title'}</div>
         </div>
       </div>
 

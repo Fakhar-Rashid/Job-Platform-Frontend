@@ -27,3 +27,27 @@ export function experienceLabel(level) {
   const map = { ENTRY: 'Entry level', INTERMEDIATE: 'Intermediate', EXPERT: 'Expert' };
   return map[level] ?? 'Entry level';
 }
+
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
+
+export function monthLabel(value) {
+  if (!value) return '';
+  const [year, month] = value.split('-');
+  return `${MONTHS[Number(month) - 1] ?? ''} ${year}`.trim();
+}
+
+export const HOURS_LABEL = {
+  AS_NEEDED: 'As needed - open to offers',
+  LESS_THAN_30: 'Less than 30 hrs/week',
+  MORE_THAN_30: 'More than 30 hrs/week',
+};
+
+export const PROFICIENCY_LABEL = {
+  BASIC: 'Basic',
+  CONVERSATIONAL: 'Conversational',
+  FLUENT: 'Fluent',
+  NATIVE_OR_BILINGUAL: 'Native or Bilingual',
+};

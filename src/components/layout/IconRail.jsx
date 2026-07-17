@@ -4,6 +4,7 @@ import {
   CircleDollarSign, MessageSquare, Settings, HelpCircle,
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth.js';
+import { avatarFor } from '../../utils/avatar.js';
 
 const NAV = [
   { to: '/search', icon: Search, label: 'Search' },
@@ -25,7 +26,7 @@ export default function IconRail() {
       <div className="rail-top">
         <Link to="/" className="up-logo" aria-label="Home">up</Link>
         <Link to={user ? '/profile' : '/login'} aria-label="Profile">
-          <img className="rail-avatar" src={`https://i.pravatar.cc/80?u=${user?.id ?? 'guest'}`} alt="" />
+          <img className="rail-avatar" src={avatarFor(user, 80)} alt="" />
         </Link>
       </div>
 

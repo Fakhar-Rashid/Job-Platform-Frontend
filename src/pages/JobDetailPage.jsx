@@ -3,8 +3,11 @@ import { useParams } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import BidForm from '../components/BidForm.jsx';
 import BidCard from '../components/BidCard.jsx';
+import ReviewForm from '../components/ReviewForm.jsx';
+import Stars from '../components/profile/Stars.jsx';
 import * as jobsApi from '../api/jobs.js';
 import * as bidsApi from '../api/bids.js';
+import * as reviewsApi from '../api/reviews.js';
 import { getErrorMessage } from '../api/client.js';
 
 export default function JobDetailPage() {
@@ -12,6 +15,7 @@ export default function JobDetailPage() {
   const { user } = useAuth();
   const [job, setJob] = useState(null);
   const [bids, setBids] = useState([]);
+  const [review, setReview] = useState(null);
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
 
@@ -25,6 +29,7 @@ export default function JobDetailPage() {
       if (user && user.id === data.owner?.id) {
         setBids(await bidsApi.jobBids(id));
       }
+      setReview(data.status === 'CLOSED' ? await reviewsApi.getReview(id) : null);
     } catch (err) {
       setError(getErrorMessage(err));
     }
@@ -71,6 +76,23 @@ export default function JobDetailPage() {
         <p className="muted">Log in to place a bid.</p>
       ) : (
         <p className="muted">This job is closed.</p>
+      )}
+
+      {job.status === 'CLOSED' && review && (
+        <section className="card">
+          <div className="row" style={{ gap: 8 }}>
+            <Stars rating={review.rating} />
+            <b>{review.rating.toFixed(1)}</b>
+          </div>
+          <p className="section-sub">“{review.comment}”</p>
+          <p className="muted">— {review.author?.name}</p>
+        </section>
+      )}
+
+      {isOwner && job.status === 'CLOSED' && !review && (
+        <div className="card">
+          <ReviewForm jobId={job.id} onDone={() => { setNotice('Review submitted.'); load(); }} />
+        </div>
       )}
     </>
   );

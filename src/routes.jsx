@@ -14,6 +14,7 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<JobsPage />} />
       <Route path="/jobs/:id" element={<JobDetailPage />} />
+      <Route path="/users/:id" element={<ProfilePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route element={<ProtectedRoute />}>

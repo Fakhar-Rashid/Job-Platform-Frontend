@@ -6,6 +6,7 @@ import Switch from '../components/ui/Switch';
 import Modal from '../components/profile/Modal';
 import ItemForm from '../components/profile/ItemForm';
 import { useAuth } from '../hooks/useAuth';
+import { useTopUpWallet } from '../hooks/queries/useWallet';
 import * as profileApi from '../api/profile';
 import * as connectsApi from '../api/connects';
 import { getErrorMessage } from '../api/client';
@@ -15,6 +16,7 @@ export default function SettingsPage() {
   const [editing, setEditing] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const topUp = useTopUpWallet();
 
   if (!user) return null;
 
@@ -70,6 +72,16 @@ export default function SettingsPage() {
           <span className="text-muted">Online for messages</span>
           <Switch checked={user.onlineForMessages} onChange={toggleOnline} label="Online for messages" />
         </div>
+      </Card>
+
+      <Card>
+        <div className="mb-3 flex items-start justify-between gap-3">
+          <h3>Wallet: ${user.walletBalance}</h3>
+        </div>
+        <p className="mb-3 text-sm text-muted">Simulated balance for contracts and escrow.</p>
+        <Button variant="outline" onClick={() => topUp.mutate()} disabled={topUp.isPending}>
+          {topUp.isPending ? 'Adding…' : 'Add $500'}
+        </Button>
       </Card>
 
       <Card>

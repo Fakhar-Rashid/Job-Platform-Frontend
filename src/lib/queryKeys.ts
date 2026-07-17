@@ -12,4 +12,7 @@ export const queryKeys = {
   profile: (id: string) => ['profile', id] as const,
   connects: () => ['connects'] as const,
   talent: () => ['talent'] as const,
+  contracts: () => ['contracts'] as const,
+  contract: (id: string) => ['contracts', id] as const,
+  wallet: () => ['wallet'] as const,
 };

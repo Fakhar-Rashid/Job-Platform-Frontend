@@ -35,14 +35,3 @@ export function usePlaceBid(jobId: string) {
     },
   });
 }
-
-export function useAcceptBid(jobId: string) {
-  const qc = useQueryClient();
-  return useMutation({
-    mutationFn: (bidId: string) => bidsApi.acceptBid(bidId),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: queryKeys.job(jobId) });
-      qc.invalidateQueries({ queryKey: queryKeys.jobBids(jobId) });
-    },
-  });
-}

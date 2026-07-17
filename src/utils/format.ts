@@ -1,9 +1,11 @@
 import type {
+  ContractStatus,
   ExperienceLevel,
   HoursPerWeek,
   Job,
   JobDuration,
   LanguageProficiency,
+  MilestoneStatus,
   ProjectTerm,
   ScopeSize,
 } from '../types';
@@ -103,4 +105,29 @@ export function jobRateLabel(job: Pick<Job, 'jobType' | 'budget' | 'hourlyRateMi
 export function serviceFee(amount: number): { fee: number; receives: number } {
   const fee = Math.round(amount * 0.1 * 100) / 100;
   return { fee, receives: Math.round((amount - fee) * 100) / 100 };
+}
+
+export function payoutAfterFee(amount: number): number {
+  return amount - Math.round(amount * 0.1);
+}
+
+export const CONTRACT_STATUS_LABEL: Record<ContractStatus, string> = {
+  OFFERED: 'Offer pending',
+  ACTIVE: 'Active',
+  DECLINED: 'Declined',
+  WITHDRAWN: 'Withdrawn',
+  ENDED: 'Ended',
+};
+
+export const MILESTONE_STATUS_LABEL: Record<MilestoneStatus, string> = {
+  PENDING: 'Not funded',
+  FUNDED: 'In escrow',
+  SUBMITTED: 'Work submitted',
+  CHANGES_REQUESTED: 'Changes requested',
+  APPROVED: 'Paid',
+  CANCELLED: 'Cancelled',
+};
+
+export function todayISO(): string {
+  return new Date().toISOString().slice(0, 10);
 }

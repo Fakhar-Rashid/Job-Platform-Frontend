@@ -8,6 +8,8 @@ import PostJobPage from './pages/PostJobPage';
 import MyJobsPage from './pages/MyJobsPage';
 import MyBidsPage from './pages/MyBidsPage';
 import TalentPage from './pages/TalentPage';
+import ContractsPage from './pages/ContractsPage';
+import ContractRoomPage from './pages/ContractRoomPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import LoginPage from './pages/LoginPage';
@@ -24,6 +26,8 @@ export default function AppRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/contracts" element={<ContractsPage />} />
+        <Route path="/contracts/:id" element={<ContractRoomPage />} />
       </Route>
       <Route element={<RoleRoute role="CLIENT" />}>
         <Route path="/post-job" element={<PostJobPage />} />

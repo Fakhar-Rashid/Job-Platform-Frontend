@@ -1,5 +1,14 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, CircleDollarSign, Briefcase, Users, Settings, HelpCircle, type LucideIcon } from 'lucide-react';
+import {
+  Home,
+  CircleDollarSign,
+  Briefcase,
+  FileText,
+  Users,
+  Settings,
+  HelpCircle,
+  type LucideIcon,
+} from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { avatarFor } from '../../utils/avatar';
 import AccountMenu from './AccountMenu';
@@ -13,12 +22,14 @@ interface NavItem {
 const FREELANCER_NAV: NavItem[] = [
   { to: '/', icon: Home, label: 'Home' },
   { to: '/my-bids', icon: CircleDollarSign, label: 'My proposals' },
+  { to: '/contracts', icon: FileText, label: 'Contracts' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 
 const CLIENT_NAV: NavItem[] = [
   { to: '/', icon: Home, label: 'Home' },
   { to: '/my-jobs', icon: Briefcase, label: 'My jobs' },
+  { to: '/contracts', icon: FileText, label: 'Contracts' },
   { to: '/talent', icon: Users, label: 'Find talent' },
   { to: '/settings', icon: Settings, label: 'Settings' },
 ];

@@ -1,26 +1,49 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import Badge from '../ui/Badge';
-import Card from '../ui/Card';
 import Pill from '../ui/Pill';
+import Button from '../ui/Button';
 import BidCard from '../BidCard';
-import ReviewForm from '../ReviewForm';
-import Stars from '../profile/Stars';
-import { useJobBids, useAcceptBid } from '../../hooks/queries/useBids';
-import { useReview } from '../../hooks/queries/useReview';
+import HireModal from '../contract/HireModal';
+import { useJobBids } from '../../hooks/queries/useBids';
 import { jobRateLabel } from '../../utils/format';
-import type { Bid, JobDetail } from '../../types';
+import type { Bid, ContractStatus, JobDetail } from '../../types';
 
 interface ManageJobViewProps {
   job: JobDetail;
 }
 
-export default function ManageJobView({ job }: ManageJobViewProps) {
-  const [notice, setNotice] = useState('');
-  const closed = job.status === 'CLOSED';
+const CONTRACT_ACTION: Partial<Record<ContractStatus, { badge: React.ReactNode; link: string }>> = {
+  OFFERED: { badge: <Badge>Offer sent</Badge>, link: 'View offer' },
+  ACTIVE: { badge: <Badge variant="open">Hired</Badge>, link: 'View contract' },
+  ENDED: { badge: <Badge>Contract ended</Badge>, link: 'View contract' },
+};
 
+export default function ManageJobView({ job }: ManageJobViewProps) {
+  const [hiringBid, setHiringBid] = useState<Bid | null>(null);
   const { data: bids = [] } = useJobBids(job.id, true);
-  const { data: review } = useReview(job.id, closed);
-  const acceptBid = useAcceptBid(job.id);
+
+  function bidAction(bid: Bid): React.ReactNode {
+    const contract = bid.contracts?.[0];
+    if (!contract) {
+      if (job.status !== 'OPEN') return null;
+      return (
+        <Button size="sm" onClick={() => setHiringBid(bid)}>
+          Hire
+        </Button>
+      );
+    }
+    const entry = CONTRACT_ACTION[contract.status];
+    if (!entry) return null;
+    return (
+      <span className="flex items-center gap-3">
+        {entry.badge}
+        <Link className="font-medium text-brand" to={`/contracts/${contract.id}`}>
+          {entry.link}
+        </Link>
+      </span>
+    );
+  }
 
   return (
     <>
@@ -32,7 +55,6 @@ export default function ManageJobView({ job }: ManageJobViewProps) {
       <p className="text-muted">
         {job.jobType === 'HOURLY' ? 'Rate' : 'Budget'}: {jobRateLabel(job)}
       </p>
-      {notice && <p className="text-muted">{notice}</p>}
 
       <section className="flex flex-col gap-3">
         <h3>Proposals ({bids.length})</h3>
@@ -44,31 +66,12 @@ export default function ManageJobView({ job }: ManageJobViewProps) {
                 <Pill className="ml-2">Boosted</Pill>
               </div>
             )}
-            <BidCard
-              bid={bid}
-              canAccept={job.status === 'OPEN'}
-              onAccept={(bidId: string) => acceptBid.mutate(bidId)}
-            />
+            <BidCard bid={bid} action={bidAction(bid)} />
           </div>
         ))}
       </section>
 
-      {closed && review && (
-        <Card>
-          <div className="flex items-center gap-2">
-            <Stars rating={review.rating} />
-            <b>{review.rating.toFixed(1)}</b>
-          </div>
-          <p className="mt-1 text-[13px]">“{review.comment}”</p>
-          <p className="text-muted">— {review.author?.name}</p>
-        </Card>
-      )}
-
-      {closed && !review && (
-        <Card>
-          <ReviewForm jobId={job.id} onDone={() => setNotice('Review submitted.')} />
-        </Card>
-      )}
+      {hiringBid && <HireModal job={job} bid={hiringBid} onClose={() => setHiringBid(null)} />}
     </>
   );
 }

@@ -5,6 +5,40 @@ import { useMyBids } from '../hooks/queries/useBids';
 import { getErrorMessage } from '../api/client';
 import type { Bid } from '../types';
 
+function contractInfo(bid: Bid): React.ReactNode {
+  const contract = bid.contracts?.[0];
+  if (!contract) return null;
+  if (contract.status === 'OFFERED') {
+    return (
+      <span className="flex items-center gap-2.5">
+        <Badge variant="open">Offer received</Badge>
+        <Link className="font-medium text-brand" to={`/contracts/${contract.id}`}>
+          View offer
+        </Link>
+      </span>
+    );
+  }
+  if (contract.status === 'ACTIVE') {
+    return (
+      <span className="flex items-center gap-2.5">
+        <Badge variant="open">Hired</Badge>
+        <Link className="font-medium text-brand" to={`/contracts/${contract.id}`}>
+          View contract
+        </Link>
+      </span>
+    );
+  }
+  if (contract.status === 'ENDED') {
+    return (
+      <span className="flex items-center gap-2.5">
+        <Badge>Ended</Badge>
+        <Link to={`/contracts/${contract.id}`}>View contract</Link>
+      </span>
+    );
+  }
+  return null;
+}
+
 export default function MyBidsPage() {
   const { data: bids = [], error, isLoading } = useMyBids();
 
@@ -26,9 +60,12 @@ export default function MyBidsPage() {
               <Badge variant={bid.status === 'ACCEPTED' ? 'open' : 'neutral'}>{bid.status}</Badge>
             </div>
             <p className="text-muted">{bid.coverLetter}</p>
-            <span>
-              Your offer: ${bid.amount} · Spent {bid.connectsSpent} connects
-            </span>
+            <div className="flex items-center justify-between gap-3">
+              <span>
+                Your offer: ${bid.amount} · Spent {bid.connectsSpent} connects
+              </span>
+              {contractInfo(bid)}
+            </div>
           </Card>
         ))
       )}

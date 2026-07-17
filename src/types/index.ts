@@ -9,12 +9,16 @@ export type ScopeSize = 'LARGE' | 'MEDIUM' | 'SMALL';
 export type ProjectTerm = 'LONG_TERM' | 'SHORT_TERM';
 export type JobDuration = 'MORE_THAN_6_MONTHS' | 'THREE_TO_SIX_MONTHS' | 'ONE_TO_THREE_MONTHS';
 
+import type { ContractStatus } from './contracts';
+export * from './contracts';
+
 export interface CurrentUser {
   id: string;
   name: string;
   email: string;
   createdAt: string;
   connectBalance: number;
+  walletBalance: number;
   title?: string | null;
   avatarUrl?: string | null;
   hourlyRate?: number | null;
@@ -113,6 +117,7 @@ export interface Bid {
   freelancerId: string;
   freelancer?: { id: string; name: string };
   job?: { id: string; title: string; status?: JobStatus };
+  contracts?: { id: string; status: ContractStatus }[];
 }
 
 export interface Review {

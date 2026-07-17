@@ -13,5 +13,3 @@ export const jobBids = (jobId: string): Promise<Bid[]> => api.get(`/jobs/${jobId
 export const jobBoosts = (jobId: string): Promise<BoostEntry[]> =>
   api.get(`/jobs/${jobId}/bids/boosts`).then((r) => r.data);
 export const myBids = (): Promise<Bid[]> => api.get('/bids/mine').then((r) => r.data);
-export const acceptBid = (bidId: string): Promise<Bid> =>
-  api.post(`/bids/${bidId}/accept`).then((r) => r.data);
